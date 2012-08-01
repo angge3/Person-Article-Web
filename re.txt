@@ -1,4 +1,4 @@
 1.register,login,changePassword,logout
 2.post article
-3.review article list(by category,by date)
+3.review article list(by category)
 4.review a specific article
