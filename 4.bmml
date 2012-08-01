@@ -96,12 +96,12 @@
         <text>Password</text>
       </controlProperties>
     </control>
-    <control controlID="23" controlTypeID="com.balsamiq.mockups::Button" x="738" y="319" w="240" h="27" measuredW="67" measuredH="27" zOrder="23" locked="false" isInGroup="-1">
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::Button" x="738" y="319" w="95" h="27" measuredW="67" measuredH="27" zOrder="23" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Login%20in</text>
       </controlProperties>
     </control>
-    <control controlID="24" controlTypeID="com.balsamiq.mockups::Link" x="790" y="361" w="-1" h="-1" measuredW="136" measuredH="21" zOrder="24" locked="false" isInGroup="-1">
+    <control controlID="24" controlTypeID="com.balsamiq.mockups::Link" x="780" y="377" w="-1" h="-1" measuredW="136" measuredH="21" zOrder="24" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Forgot%20your%20password%3F</text>
       </controlProperties>
@@ -127,7 +127,7 @@
         <text>Password</text>
       </controlProperties>
     </control>
-    <control controlID="30" controlTypeID="com.balsamiq.mockups::Button" x="1229" y="324" w="240" h="27" measuredW="53" measuredH="27" zOrder="30" locked="false" isInGroup="-1">
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::Button" x="1229" y="324" w="83" h="27" measuredW="53" measuredH="27" zOrder="30" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Start</text>
       </controlProperties>
@@ -135,6 +135,16 @@
     <control controlID="32" controlTypeID="com.balsamiq.mockups::Button" x="1531" y="58" w="-1" h="-1" measuredW="58" measuredH="27" zOrder="31" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Log%20in</text>
+      </controlProperties>
+    </control>
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::CheckBox" x="853" y="320" w="-1" h="-1" measuredW="111" measuredH="22" zOrder="32" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>remember%20me</text>
+      </controlProperties>
+    </control>
+    <control controlID="34" controlTypeID="com.balsamiq.mockups::CheckBox" x="1345" y="324" w="-1" h="-1" measuredW="111" measuredH="22" zOrder="33" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>remember%20me</text>
       </controlProperties>
     </control>
   </controls>
