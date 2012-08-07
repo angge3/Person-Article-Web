@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -20,7 +21,10 @@ public class PazzleSolver {
 	private static  int sx;
 	private static  int sy;
 	private static  Person hero;
+	private static int energy ;
 	private static  Map<String,Person> evil = new HashMap<String,Person>();
+	private static Stack<Point> pointTrack = new Stack<Point>();
+	private static int times = Integer.MAX_VALUE;
 	static{
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(new File("exampleInput.txt")));
@@ -48,7 +52,7 @@ public class PazzleSolver {
 			tempLine = reader.readLine();
 			temp = tempLine.split(" ");
 			hero = new Person(Integer.parseInt(temp[0]),Integer.parseInt(temp[1]),Integer.parseInt(temp[2]));
-		
+			energy = hero.getLife();
 			for(int i =0; i<m; i++){
 				tempLine = reader.readLine();
 				temp = tempLine.split(" ");
@@ -64,8 +68,31 @@ public class PazzleSolver {
 	}
 	
 	public static void main(String args[]){
-		//int timeCount = 0;
-		escape(sx,sy);
+		int timeCount = 1;
+		//escape(sx,sy);
+		pointTrack.push(new Point(sx,sy));
+		Stack<Point> s1 = new Stack<Point>();
+		Stack<Point> s2 = new Stack<Point>();
+		Stack<Point> s3 = new Stack<Point>();
+		Stack<Point> s4 = new Stack<Point>();
+		boolean flag = false;
+		if(escapeOneStep(sx,sy-1,s1,timeCount,hero)) flag = true;
+		if(escapeOneStep(sx,sy+1,s2,timeCount,hero)) flag = true;
+		if(escapeOneStep(sx-1,sy,s3,timeCount,hero)) flag = true;
+		if(escapeOneStep(sx+1,sy,s4,timeCount,hero)) flag = true;
+		for(int i=0; i<w; i++){
+			for(int j=0 ; j<h; j++){
+				System.out.print(map[i][j]);
+			}
+			System.out.println();
+		}
+		if(flag&&times<=100){
+			DecimalFormat   df   =   new   DecimalFormat( "0.####");
+			System.out.println(df.format(energy/(double)times));
+		}else{
+			System.out.println("impossible");
+		}
+		
 	}
 	
 	public static void escape(int sx, int sy){
@@ -118,6 +145,109 @@ public class PazzleSolver {
 		if(nowChar == 'E'){
 			System.out.println("escape successfully!");
 		}
+	}
+	
+	
+	public static boolean escapeOneStep(int sx,int sy,Stack<Point> s,int time,Person andy){
+		boolean flag = false;
+		if(map[sx][sy]=='E'){
+			//System.out.println("escape successfully!");
+			flag = true;
+			//System.out.println("time : "+time);
+			if(times>time)
+				times = time;
+			//System.out.println("andy life:"+andy.getLife());
+		}
+		else{
+			if(map[sx][sy]=='S'||map[sx][sy]=='.'||Character.isDigit(map[sx][sy])||Character.isUpperCase(map[sx][sy])){
+				
+				if(Character.isDigit(map[sx][sy])){
+					if(killMonster(andy, map[sx][sy])){
+						Point temp = pointTrack.pop();
+						pointTrack.push(new Point(sx,sy));
+						
+						if(!(temp.getX()==sx&&temp.getY()==(sy-1))){
+							map[sx][sy]='@';
+							if(escapeOneStep(sx,sy-1,s,time+1,andy)) flag=true;
+							map[sx][sy]='.';
+						}
+						if(!(temp.getX()==sx&&temp.getY()==(sy+1))){
+							map[sx][sy]='@';
+							if(escapeOneStep(sx,sy+1,s,time+1,andy)) flag=true;
+							map[sx][sy]='.';
+						}
+						if(!(temp.getX()==(sx-1)&&temp.getY()==sy)){
+							map[sx][sy]='@';
+							if(escapeOneStep(sx-1,sy,s,time+1,andy)) flag=true;
+							map[sx][sy]='.';
+						}
+						if(!(temp.getX()==(sx+1)&&temp.getY()==sy)){
+							map[sx][sy]='@';
+							if(escapeOneStep(sx+1,sy,s,time+1,andy)) flag=true;
+							map[sx][sy]='.';
+						}
+					}
+				}else{
+					if(Character.isUpperCase(map[sx][sy])){
+						getSupply(andy,map[sx][sy]);
+					}
+					Point temp = pointTrack.pop();
+					pointTrack.push(new Point(sx,sy));
+					
+					if(!(temp.getX()==sx&&temp.getY()==(sy-1))){
+						map[sx][sy]='@';
+						if(escapeOneStep(sx,sy-1,s,time+1,andy)) flag=true;
+						map[sx][sy]='.';
+					}
+					if(!(temp.getX()==sx&&temp.getY()==(sy+1))){
+						map[sx][sy]='@';
+						if(escapeOneStep(sx,sy+1,s,time+1,andy)) flag=true;
+						map[sx][sy]='.';
+					}
+					if(!(temp.getX()==(sx-1)&&temp.getY()==sy)){
+						map[sx][sy]='@';
+						if(escapeOneStep(sx-1,sy,s,time+1,andy)) flag=true;
+						map[sx][sy]='.';
+					}
+					if(!(temp.getX()==(sx+1)&&temp.getY()==sy)){
+						map[sx][sy]='@';
+						if(escapeOneStep(sx+1,sy,s,time+1,andy)) flag=true;
+						map[sx][sy]='.';
+					}
+				}
+				
+			}
+			
+			
+		}
+		if(flag) s.push(new Point(sx,sy)); else time--;
+		return flag;
+	}
+	
+	public static void getSupply(Person andy,char mark){
+		switch(mark){
+			case 'A': andy.setLife(andy.getLife()+p);
+			case 'B': andy.setAttack(andy.getAttack()+q);
+			case 'C': andy.setDefend(andy.getDefend()+r);
+		}
+	}
+	
+	public static boolean killMonster(Person andy,char mark){
+		Person monster = evil.get(mark+"");
+		while(andy.getLife()>0&&monster.getLife()>0){
+			int loseLife = monster.getAttack()-andy.getDefend();
+			if(loseLife<0) loseLife=0;
+			andy.setLife(andy.getLife()-loseLife);
+			int monsterLoseLife = andy.getAttack()-monster.getDefend();
+			if(monsterLoseLife<0) monsterLoseLife=0;
+			monster.setLife(monster.getLife()-monsterLoseLife);
+		}
+		boolean flag = true;
+		if(andy.getLife()<=0)
+			flag =  false;
+		if(monster.getLife()<=0)
+			flag =  true;
+		return flag;
 	}
 	
 }
