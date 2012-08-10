@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Test Kind Editor</title>
+		<script charset="utf-8" src="kindeditor/kindeditor.js"></script>
+		<script charset="utf-8" src="kindeditor/lang/zh_CN.js"></script>
+		<script charset="utf-8" src="kindeditor/plugins/code/prettify.js"></script>
+		<script charset="utf-8" src="jquery.js"></script>
+		<script>
+			var editor;
+			KindEditor.ready(function(K) {
+				editor = K.create('#editor_id');
+			});
+			$(function() {
+				$("#commit").on("click", function() {
+					$("#content").html(editor.html());
+					prettyPrint();
+				});
+			});
+
+		</script>
+		<link rel="stylesheet" href="kindeditor/plugins/code/prettify.css" />
+	</head>
+	<body>
+		<textarea id="editor_id" name="content" style="width:700px;height:300px;">
+			&lt;strong&gt;HTML内容&lt;/strong&gt;
+		</textarea>
+		<button id="commit">
+			Commit
+		</button>
+		<div id="content">
+
+		</div>
+		
+	</body>
+</html>
