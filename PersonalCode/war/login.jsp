@@ -81,9 +81,11 @@ body {
 		});
 		$(".inputText").on("focus", function() {
 			$($(this).parent()).css("background-position", "-210px 0");
+			$(this).val("");
 		});
 		$(".inputText").on("blur", function() {
 			$($(this).parent()).css("background-position", "-210px -52px");
+			
 		});
 		$(".loginButton").on("mouseover", function() {
 			$(this).css("background-color", "#67B021");
