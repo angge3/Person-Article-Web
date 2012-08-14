@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ page import="com.appspot.angge3.business.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="./js/jquery/jquery-1.8.0.min.js"></script>
-<title>Login</title>
+<title>Register</title>
 <style type="text/css">
 body {
 	background: url("./image/allBackground.png") repeat;
@@ -48,7 +48,7 @@ body {
 	position:relative;
 }
 
-.loginButton {
+.registerButton {
 	border: 1px solid #327E04;
 	background: #459E00;
 	font-weight: bold;
@@ -66,10 +66,6 @@ body {
 	margin-top: 10px;
 }
 
-.forgotPassDiv {
-	margin-top: 10px;
-	margin-left: 65px;
-}
 
 .link {
 	text-decoration: none;
@@ -77,7 +73,7 @@ body {
 	color: #9EA0A3;
 }
 
-.registerDiv {
+.loginDiv {
 	position: fixed;
 	right: 0px;
 	top: 20px;
@@ -98,10 +94,10 @@ body {
 	padding: 0;
 }
 
-.registerDiv a {
+.loginDiv a {
 	display: block;
 	margin-top: 10px;
-	margin-left: 13px;
+	margin-left: 20px;
 	text-decoration: none;
 	font-size: 13px;
 	color: white;
@@ -163,17 +159,16 @@ body {
 				$($($(this).parent()).find("label")).css("display","inline");
 			}
 		});
-		
-		$(".loginButton").on("mouseover", function() {
+		$(".registerButton").on("mouseover", function() {
 			$(this).css("background-color", "#67B021");
 		});
-		$(".loginButton").on("mouseout", function() {
+		$(".registerButton").on("mouseout", function() {
 			$(this).css("background-color", "#459E00");
 		});
-		$(".registerDiv").on("mouseover", function() {
+		$(".loginDiv").on("mouseover", function() {
 			$(this).css("background-color", "#67B021");
 		});
-		$(".registerDiv").on("mouseout", function() {
+		$(".loginDiv").on("mouseout", function() {
 			$(this).css("background-color", "#459E00");
 		});
 		$(".link").on("mouseover", function() {
@@ -193,16 +188,16 @@ body {
 </head>
 <body>
 	
-	<div class="registerDiv">
-		<a href="register.jsp">Register</a>
+	<div class="loginDiv">
+		<a href="login.jsp">Login</a>
 	</div>
 	<div class="content">
 		<div class="logo"></div>
 		<div class="loginFormDiv">
-			<form action="login.jsp" method="post">
+			<form action="register.jsp" method="post">
 				<div class="emailInput ">
 					<label for="email">Email</label>
-					<input type="text"  name="email" class="inputText"
+					<input type="text" name="email" class="inputText"
 						id="email" />
 				</div>
 				<div class="passwordInput ">
@@ -210,47 +205,77 @@ body {
 					<input type="password"  name="password"
 						class="inputText" id="password" />
 				</div>
-				<div id="loginError" class="errorTip">
-					Invalid Email or Password.
+				<div id="emailValidError" class="errorTip">
+					Invalid email.
+				</div>
+				<div id="emailExistError" class="errorTip">
+					Email already in use.
+				</div>
+				<div id="emptyError" class="errorTip">
+					Email or password can't be empty.
 				</div>
 				<div class="buttonAndRemember ">
-					<input type="submit" value="Login" class="loginButton" /> <input
+					<input type="submit" value="Start" class="registerButton" /> <input
 						type="checkbox" name="remember" style="margin-left: 82px; vertical-align: middle" /><span
 						style="font-size: 13px; color: #7F7F7F">remember me</span>
 				</div>
 			</form>
-			<div class="forgotPassDiv">
-				<a href="" class="link">Forgot your password?</a>
-			</div>
+			
 		</div>
 	</div>
 	<%
-		String email = (String)request.getParameter("email");
-		String password = (String)request.getParameter("password");
-		if(email!=null&&password!=null){
-			//validate
-			UserValidator validator = new UserValidator();
-			boolean valid = validator.validate(email, password);
-			if(valid){
-				//session save and redirect
-			}else{
+		String method = request.getMethod();
+		if(method.equalsIgnoreCase("POST")){
+			String email = (String)request.getParameter("email");
+			String password = (String)request.getParameter("password");
+			if(email!=null&&password!=null){
 				%>
 				<script type="text/javascript">
-					$(".errorTip").css("display","block");
-					if("<%=email.trim()%>"!=""){
-						$("#email").val("<%=email%>");
-						$(".emailInput label").css("display","none");
-					}
-					if("<%=password.trim()%>"!=""){
-						$("#password").val("<%=password%>");
-						$(".passwordInput label").css("display","none");
-					}
+					$("#email").val("<%=email%>");
+					$("#password").val("<%=password%>");
+					$(".loginFormDiv label").css("display","none");
 				</script>
-				<%
+				<% 
 			}
+			%>
+				<script type="text/javascript">
+					if($.trim($("#email").val())==""||$.trim($("#password").val())==""){
+						$("#emptyError").css("display","block");
+						if($.trim($("#email").val())==""){
+							$(".emailInput label").css("display","inline");
+						}
+						if($.trim($("#password").val())==""){
+							$(".passwordInput label").css("display","inline");
+						}
+					}else{
+						var format = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+						var result = format.exec($.trim($("#email").val()));
+						if(result==null){
+							$("#emailValidError").css("display","block");
+						}else{
+							<%
+								
+								if(email!=null){
+									UserValidator validator = new UserValidator();
+									boolean emailExist = validator.validateEmail(email);
+									if(emailExist){
+										%>
+											$("#emailExistError").css("display","block");
+										<%
+									}else{
+										new UserRegister().registerUser(email, password);
+										//session save and redirect
+									}
+								}
+							%>
+						}
+				   }
+			</script>		
+ 		  <%
 		}
-	 
-       
-	%>
+ 		  %>
+ 		
+
+	
 </body>
 </html>
