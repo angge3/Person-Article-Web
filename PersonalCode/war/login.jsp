@@ -72,6 +72,34 @@ body {
 	font-size: 13px;
 	color: #9EA0A3;
 }
+.registerDiv{
+	position:fixed;
+	right:0px;
+	top:20px;
+	width:80px;
+	height:40px;
+	background: #459E00;
+	font-weight: bold;
+	color: white;
+	-moz-border-top-left-radius: 6px;
+	-webkit-border-top-left-radius: 6px;
+	-khtml-border-top-left-radius: 6px;
+	border-top-left-radius: 6px;
+	-moz-border-bottom-left-radius: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-khtml-border-bottom-left-radius: 6px;
+	border-bottom-left-radius: 6px;
+	cursor: pointer;
+	padding:0;
+}
+.registerDiv a{
+	display:block;
+	margin-top:10px;
+	margin-left:13px;
+	text-decoration: none;
+	font-size: 13px;
+	color: white;
+}
 </style>
 <script type="text/javascript">
 	$(function() {
@@ -79,18 +107,42 @@ body {
 		$(window).resize(function() {
 			verticalMiddle();
 		});
-		$(".inputText").on("focus", function() {
+		$("#email").on("focus", function() {
 			$($(this).parent()).css("background-position", "-210px 0");
-			$(this).val("");
+			if($.trim($(this).val())=="Email"){
+				$(this).val("");
+			}
 		});
-		$(".inputText").on("blur", function() {
+		$("#password").on("focus", function() {
+			$($(this).parent()).css("background-position", "-210px 0");
+			if($.trim($(this).val())=="Password"){
+				$(this).val("");
+			}
+		});
+		$("#email").on("blur", function() {
 			$($(this).parent()).css("background-position", "-210px -52px");
+			if($.trim($(this).val())==""){
+				$(this).val("Email");
+			}
+			
+		});
+		$("#password").on("blur", function() {
+			$($(this).parent()).css("background-position", "-210px -52px");
+			if($.trim($(this).val())==""){
+				$(this).val("Password");
+			}
 			
 		});
 		$(".loginButton").on("mouseover", function() {
 			$(this).css("background-color", "#67B021");
 		});
 		$(".loginButton").on("mouseout", function() {
+			$(this).css("background-color", "#459E00");
+		});
+		$(".registerDiv").on("mouseover", function() {
+			$(this).css("background-color", "#67B021");
+		});
+		$(".registerDiv").on("mouseout", function() {
 			$(this).css("background-color", "#459E00");
 		});
 		$(".link").on("mouseover",function(){
@@ -109,15 +161,18 @@ body {
 </script>
 </head>
 <body>
+	<div class="registerDiv">
+		<a href="">Register</a>
+	</div>
 	<div class="content">
 		<div class="logo"></div>
 		<div class="loginFormDiv">
 			<form action="" method="post">
 				<div class="emailInput ">
-					<input type="text" value="Email" class="inputText" />
+					<input type="text" value="Email" class="inputText" id="email"/>
 				</div>
 				<div class="passwordInput ">
-					<input type="text" value="Password" class="inputText" />
+					<input type="text" value="Password" class="inputText" id="password" />
 				</div>
 				<div class="buttonAndRemember ">
 					<input type="button" value="Login" class="loginButton" /> <input
