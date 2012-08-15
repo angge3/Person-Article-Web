@@ -20,18 +20,50 @@
 		display:block;
 		float:left;
 		font-size:17px;
-		margin-top:30px;
-		margin-left:20px;
+		margin-top:45px;
+		color:orange;
 	}
 	.logo{
 		float:left;
 	}
+	.welcome{
+		display:block;
+		float:left;
+		font-size:14px;
+		margin-top:47px;
+		margin-left:20px;
+		color:#666;
+	}
+	.logout{
+		text-decoration: none;
+		display:block;
+		float:left;
+		font-size:14px;
+		margin-top:47px;
+		margin-left:20px;
+		color: #9EA0A3;
+	}
 </style>
+
+<script type="text/javascript">
+	$(function(){
+		$(".logout").on("mouseover", function() {
+			$(this).css("color", "#7F7F7F");
+		});
+		$(".logout").on("mouseout", function() {
+			$(this).css("color", "#9EA0A3");
+		});
+	});
+	
+</script>
+
 </head>
 <body>
 	<div class="topDiv">
 		<img alt="logo" src="../image/logo.png" class="logo">
 		<span class="slogan">Personal code and article platform</span>
+		<span class="welcome">Welcome,angge3@gmail.com!</span>
+		<a href="" class="logout">Logout</a>
 	</div>
 	<div class="navigatorDiv">
 		
