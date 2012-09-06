@@ -1,8 +1,8 @@
 /* Styles for the entire LavaLamp menu */        
 .lavaLamp {
     position: relative;
-    height: 29px; width: 858px;
-    background: url("../image/menu/menu.jpg") no-repeat top;
+    height: 27px; width: 858px;
+    background: url("../image/menu/menu.png") no-repeat top;
     padding-top: 15px;
     padding-bottom:15px;
     margin: 10px 0; 
