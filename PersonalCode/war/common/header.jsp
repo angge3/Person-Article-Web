@@ -3,6 +3,7 @@
 <script src="../js/jquery/jquery-1.8.0.min.js"></script>
 <script type="text/javascript" src="../js/lavalamp.js"></script>
 <script type="text/javascript" src="../js/easing.js"></script>
+<script type="text/javascript" src="../js/easingCompatible.js"></script>
 <link rel="stylesheet" type="text/css" href="../css/menu.css" />
 <style type="text/css">
 	body {
@@ -71,9 +72,10 @@
 		$(".logout").on("mouseout", function() {
 			$(this).css("color", "#9EA0A3");
 		});
+		
 		$(".lavaLamp").lavaLamp({ fx: "backout", speed: 700 });
 	});
-	
+	window.history.forward(1);
 </script>
 
 </head>
@@ -82,14 +84,23 @@
 		<div class="topDiv">
 			<img alt="logo" src="../image/logo.png" class="logo">
 			<span class="slogan">Personal code and article platform</span>
-			<span class="welcome">Welcome,</span><span class="loginEmail">angge3@gmail.com!</span>
-			<a href="" class="logout">Logout</a>
+			<%
+				String currentUserEmail =null;
+				if(session.getAttribute("currentUserEmail")==null){
+					response.sendRedirect("../login.jsp");
+				}else{
+					 currentUserEmail = (String)session.getAttribute("currentUserEmail");
+					
+				}
+			%>
+			<span class="welcome">Welcome,</span><span class="loginEmail"><%=currentUserEmail %>!</span>
+			<a href="/logout" class="logout">Logout</a>
 		</div>
 		<div class="navigatorDiv">
 			<ul class="lavaLamp">
-	            <li><a href="#">Homepage</a></li>
-	            <li><a href="#">Do Post</a></li>
-	            <li><a href="#">Category Management</a></li>
-	            <li><a href="#">Change Password</a></li>
+	            <li><a href="../post/allPosts.jsp">Homepage</a></li>
+	            <li><a href="../post/makePost.jsp">Do Post</a></li>
+	            <li><a href="../category/manageCategory.jsp">Category Management</a></li>
+	            <li><a href="../password/changePassword.jsp">Change Password</a></li>
 	        </ul>   
 		</div>

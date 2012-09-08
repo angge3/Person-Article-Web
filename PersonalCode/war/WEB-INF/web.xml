@@ -12,6 +12,33 @@
   <servlet-name>SystemServiceServlet</servlet-name>
   <url-pattern>/_ah/spi/*</url-pattern>
  </servlet-mapping>
+
+<servlet>
+  <servlet-name>LogoutServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.LogoutServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>LogoutServlet</servlet-name>
+  <url-pattern>/logout</url-pattern>
+</servlet-mapping>
+ 
+ <servlet>
+  <servlet-name>MakePostServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.MakePostServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>MakePostServlet</servlet-name>
+  <url-pattern>/makePost</url-pattern>
+</servlet-mapping>
+ 
+  <servlet>
+  <servlet-name>AllPostServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.AllPostServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>AllPostServlet</servlet-name>
+  <url-pattern>/allPost</url-pattern>
+</servlet-mapping>
  
  <welcome-file-list>
      <welcome-file>login.jsp</welcome-file>

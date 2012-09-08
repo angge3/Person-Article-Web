@@ -254,7 +254,6 @@ body {
 							$("#emailValidError").css("display","block");
 						}else{
 							<%
-								
 								if(email!=null){
 									UserValidator validator = new UserValidator();
 									boolean emailExist = validator.validateEmail(email);

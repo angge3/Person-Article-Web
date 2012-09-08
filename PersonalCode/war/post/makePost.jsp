@@ -65,6 +65,9 @@
 		float:left;
 		margin-top:20px;
 	}
+	#dialog-form{
+		display:none;
+	}
 </style>
 <script charset="utf-8" src="../editor/kindeditor.js"></script>
 <script charset="utf-8" src="../editor/lang/en.js"></script>
@@ -93,20 +96,33 @@
 		$(".cancelButton").on("mouseout", function() {
 			$(this).css("background-color", "#459E00");
 		});
+		$(".createCategoryLink").on("click",function(){
+			$( "#dialog-form" ).dialog( "open" );
+			return false;
+		});
 	});
 </script>
 <title>Make a Post</title>
+<link rel="stylesheet" href="../js/jquery/jquery-ui-1.8.23.custom/css/south-street/jquery-ui-1.8.23.custom.css">
 
 
 <%@ include file="../common/header.jsp"%>
-
+<div id="dialog-form" title="Create new Category">
+	<form style="padding-top:20px;">
+		<label for="categoryName">Category Name : </label>
+		<input type="text" name="categoryName" id="categoryName" class="text ui-widget-content ui-corner-all" />
+		<div style="margin-top:10px;color:red;font-style: italic;display:none" id="errorTip">Category name can not be empty!</div>
+		<div style="margin-top:10px;color:green;font-weight:bold;display:none" id="successTip">Create Successfully!</div>
+		<div style="margin-top:10px;color:red;font-style:italic;display:none" id="errorTip2">Some error happend. Please try again later.</div>
+	</form>
+</div>
 <div class="mainContent">
 	<div class="title">
 		Make a Post
 	</div>
 	<div class="separateLine">
 	</div>
-	<form action="" method="post">
+	<form action="/makePost" method="post">
 		<div class="titleDiv">
 			Title
 		</div>
@@ -129,6 +145,47 @@
 	</form>
 	<button class="cancelButton">Cancel</button>
 </div>
+<script src="../js/jquery/jquery-ui-1.8.23.custom/jquery-ui-1.8.23.custom.min.js"></script>
+<script type="text/javascript">
+	$( "#dialog-form" ).dialog({
+		autoOpen: false,
+		height: 200,
+		width: 350,
+		modal: true,
+		buttons: {
+			"Confirm": function() {
+				var bValid = $.trim($("#categoryName").val())=="";
+	
+				if ( bValid ) {
+					$("#errorTip").css("display","block");
+				}else{
+					$("#errorTip").css("display","none");
+					//add category to repository
+					var successFlag = true;
+					if(successFlag){
+						$("#successTip").css("display","block");
+						setTimeout(function () {
+							$( "#dialog-form" ).dialog( "close" );
+						}, 1000);
+					}else{
+						$("#errorTip2").css("display","block");
+					}
+				}
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+				
+			}
+		},
+		close: function() {
+			$("#categoryName").val("");
+			$("#successTip").css("display","none");
+			$("#errorTip").css("display","none");
+			$("#errorTip2").css("display","none");
+		}
+	});
+
+</script>
 </div>
 </body>
 </html>

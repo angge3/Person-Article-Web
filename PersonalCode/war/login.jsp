@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="com.appspot.angge3.business.*" %>
+<%@ page import="com.google.appengine.api.datastore.Entity" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -233,6 +234,10 @@ body {
 			boolean valid = validator.validate(email, password);
 			if(valid){
 				//session save and redirect
+				session.setAttribute("currentUserEmail", email);
+				Entity user =  new UserInfoFetcher().getUserByEmail(email);
+				session.setAttribute("currentUserId", user.getKey().getId());
+				response.sendRedirect("./post/allPosts.jsp");
 			}else{
 				%>
 				<script type="text/javascript">
