@@ -1,11 +1,17 @@
 package com.appspot.angge3.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import com.appspot.angge3.model.Article;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Transaction;
 
 public class ArticleDao {
@@ -27,5 +33,16 @@ public class ArticleDao {
 				txn.rollback();
 			}
 		}
+	}
+	
+	public List<Entity> getArticlesByOwnerId(long ownerId,int offset,int limitNum){
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query q = new Query(Article.KIND_NAME).addSort(Article.DATE,SortDirection.DESCENDING);
+		q.setAncestor(Article.ANCESTOR_KEY);
+		q.setFilter(new FilterPredicate(Article.OWNER_ID,
+				Query.FilterOperator.EQUAL, ownerId));
+		PreparedQuery pq = datastore.prepare(q);
+		return pq.asList(FetchOptions.Builder.withLimit(limitNum).offset(offset));
 	}
 }

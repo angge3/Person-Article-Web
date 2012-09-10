@@ -100,6 +100,8 @@
 			$( "#dialog-form" ).dialog( "open" );
 			return false;
 		});
+		$(".lavaLamp li").removeClass("current");
+		 $(".lavaLamp li:eq(1)").addClass("current");
 	});
 </script>
 <title>Make a Post</title>
@@ -184,7 +186,7 @@
 			$("#errorTip2").css("display","none");
 		}
 	});
-
+	
 </script>
 </div>
 </body>

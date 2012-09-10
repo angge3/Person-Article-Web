@@ -28,7 +28,7 @@ public class MakePostServlet extends HttpServlet{
 		String content = req.getParameter("content");
 		ArticlePoster poster = new ArticlePoster();
 		poster.postArticle(title, categoryId, content, new Date(), (Long)(req.getSession().getAttribute("currentUserId")));
-		resp.sendRedirect("./post/allPosts.jsp");
+		resp.sendRedirect("/allPost?limitNum=20&offset=0");
 	}
 	
 }

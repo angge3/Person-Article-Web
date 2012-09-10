@@ -89,6 +89,13 @@
 </style>
 <title>Category Management</title>
 <link rel="stylesheet" href="../js/jquery/jquery-ui-1.8.23.custom/css/south-street/jquery-ui-1.8.23.custom.css">
+<script type="text/javascript" src="../js/jquery/jquery-1.8.0.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$(".lavaLamp li").removeClass("current");
+		 $(".lavaLamp li:eq(2)").addClass("current");
+	});
+</script>
 <%@ include file="../common/header.jsp"%>
 <div id="dialog-form" title="Edit Category">
 	<form style="padding-top:20px;">
@@ -153,6 +160,7 @@
 <script src="../js/jquery/jquery-ui-1.8.23.custom/jquery-ui-1.8.23.custom.min.js"></script>
 <script type="text/javascript">
 	$(function(){
+		
 		$(".addButton").on("mouseover", function() {
 			$(this).css("background-color", "#67B021");
 		});

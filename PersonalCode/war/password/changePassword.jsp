@@ -65,6 +65,13 @@
 </style>
 <title>Change Password</title>
 <link rel="stylesheet" href="../js/jquery/jquery-ui-1.8.23.custom/css/south-street/jquery-ui-1.8.23.custom.css">
+<script type="text/javascript" src="../js/jquery/jquery-1.8.0.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$(".lavaLamp li").removeClass("current");
+		 $(".lavaLamp li:eq(3)").addClass("current");
+	});
+</script>
 <%@ include file="../common/header.jsp"%>
 <div class="mainContent">
 <div class="title">
@@ -106,6 +113,7 @@
 <script src="../js/jquery/jquery-ui-1.8.23.custom/jquery-ui-1.8.23.custom.min.js"></script>
 <script type="text/javascript">
 	$(function(){
+		
 		$(".inputText").on("keyup", function() {
 			if($(this).val()!=""){
 				$($($(this).parent()).find("label")).css("display","none");
