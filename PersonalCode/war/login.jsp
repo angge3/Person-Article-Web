@@ -237,7 +237,7 @@ body {
 				session.setAttribute("currentUserEmail", email);
 				Entity user =  new UserInfoFetcher().getUserByEmail(email);
 				session.setAttribute("currentUserId", user.getKey().getId());
-				response.sendRedirect("/allPost?limitNum=20&offset=0");
+				response.sendRedirect("./post/allPosts.jsp");
 			}else{
 				%>
 				<script type="text/javascript">

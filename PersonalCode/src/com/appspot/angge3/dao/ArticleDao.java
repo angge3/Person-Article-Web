@@ -10,12 +10,14 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.datastore.Transaction;
 
 public class ArticleDao {
-	public void insertArticleEntity(String title,long categoryId,String content,Date date,long ownerId) {
+	public void insertArticleEntity(String title,long categoryId,Text content,Date date,long ownerId) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		Transaction txn = datastore.beginTransaction();
@@ -44,5 +46,18 @@ public class ArticleDao {
 				Query.FilterOperator.EQUAL, ownerId));
 		PreparedQuery pq = datastore.prepare(q);
 		return pq.asList(FetchOptions.Builder.withLimit(limitNum).offset(offset));
+	}
+	
+	public List<Entity> getArticlesByOwnerIdAndCategoryId(long ownerId,long categoryId){
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query q = new Query(Article.KIND_NAME);
+		q.setAncestor(Article.ANCESTOR_KEY);
+		q.setFilter(CompositeFilterOperator.and(
+				new FilterPredicate(Article.OWNER_ID,Query.FilterOperator.EQUAL, ownerId),
+				new FilterPredicate(Article.CATEGORY_ID,Query.FilterOperator.EQUAL, categoryId)
+		));
+		PreparedQuery pq = datastore.prepare(q);
+		return pq.asList(FetchOptions.Builder.withDefaults());
 	}
 }

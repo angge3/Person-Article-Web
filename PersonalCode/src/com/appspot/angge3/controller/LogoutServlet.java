@@ -13,8 +13,8 @@ public class LogoutServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		req.getSession().removeAttribute("currentUserEmail");
-		req.getSession().removeAttribute("currentUserId");
+		
+		req.getSession().invalidate();
 		resp.sendRedirect("./login.jsp");
 	}
 

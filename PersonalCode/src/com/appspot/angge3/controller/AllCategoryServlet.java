@@ -8,22 +8,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.appspot.angge3.dao.ArticleDao;
+import com.appspot.angge3.business.CategoryFetcher;
 import com.google.appengine.api.datastore.Entity;
 
-public class AllPostServlet extends HttpServlet{
+public class AllCategoryServlet extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		long ownerId = (Long)req.getSession().getAttribute("currentUserId");
-		int page = Integer.parseInt(req.getParameter("page"));
-		int limitNum = Integer.parseInt(req.getParameter("limitNum"));
-		ArticleDao articleDao = new ArticleDao();
-		List<Entity> postsList = articleDao.getArticlesByOwnerId(ownerId, (page-1)*limitNum, limitNum);
-		req.getSession().setAttribute("postsList", postsList);
-		resp.sendRedirect("./post/allPosts.jsp");
+		if(req.getSession().getAttribute("currentUserId")==null){
+			resp.sendRedirect("./login.jsp");
+		}else{
+			CategoryFetcher fetcher = new CategoryFetcher();
+			long ownerId = (Long)req.getSession().getAttribute("currentUserId");
+			List<Entity> allCategoryList = fetcher.getAllCategoryByOwnerId(ownerId);
+			req.getSession().setAttribute("allCategoryList", allCategoryList);
+			resp.sendRedirect("./category/manageCategory.jsp");
+		}
 	}
 
 	@Override
@@ -32,5 +34,5 @@ public class AllPostServlet extends HttpServlet{
 		// TODO Auto-generated method stub
 		doGet(req,resp);
 	}
-	
+
 }

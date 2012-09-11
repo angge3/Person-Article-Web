@@ -31,13 +31,40 @@
   <url-pattern>/makePost</url-pattern>
 </servlet-mapping>
  
-  <servlet>
-  <servlet-name>AllPostServlet</servlet-name>
-  <servlet-class>com.appspot.angge3.controller.AllPostServlet</servlet-class>
+<servlet>
+  <servlet-name>AddCategoryServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.AddCategoryServlet</servlet-class>
 </servlet>
 <servlet-mapping>
-  <servlet-name>AllPostServlet</servlet-name>
-  <url-pattern>/allPost</url-pattern>
+  <servlet-name>AddCategoryServlet</servlet-name>
+  <url-pattern>/addCategory</url-pattern>
+</servlet-mapping>
+ 
+ <servlet>
+  <servlet-name>AllCategoryServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.AllCategoryServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>AllCategoryServlet</servlet-name>
+  <url-pattern>/allCategory</url-pattern>
+</servlet-mapping>
+
+<servlet>
+  <servlet-name>UpdateCategoryServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.UpdateCategoryServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>UpdateCategoryServlet</servlet-name>
+  <url-pattern>/updateCategory</url-pattern>
+</servlet-mapping>
+ 
+ <servlet>
+  <servlet-name>DeleteCategoryServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.DeleteCategoryServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>DeleteCategoryServlet</servlet-name>
+  <url-pattern>/deleteCategory</url-pattern>
 </servlet-mapping>
  
  <welcome-file-list>

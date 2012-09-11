@@ -1,5 +1,9 @@
+<%@page import="com.appspot.angge3.model.Category"%>
+<%@page import="com.appspot.angge3.business.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.google.appengine.api.datastore.Entity" %>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -86,6 +90,11 @@
 	#dialog-form, #dialog-confirm,#dialog-message{
 		display:none;
 	}
+	.errorTip{
+		color:red;
+		font-style:italic;
+		display:none;
+	}
 </style>
 <title>Category Management</title>
 <link rel="stylesheet" href="../js/jquery/jquery-ui-1.8.23.custom/css/south-street/jquery-ui-1.8.23.custom.css">
@@ -97,6 +106,12 @@
 	});
 </script>
 <%@ include file="../common/header.jsp"%>
+<%
+	if(request.getSession().getAttribute("currentUserId")!=null){
+		if(request.getSession().getAttribute("allCategoryList")==null){
+			response.sendRedirect("/allCategory");
+		}else{
+%>
 <div id="dialog-form" title="Edit Category">
 	<form style="padding-top:20px;">
 		<label for="categoryName">New Category Name : </label>
@@ -129,29 +144,40 @@
 		<input type="text" class="cateNameInput" id="cateNameText"/>
 		<button class="addButton">Add >></button>
 	</div>
+	<div class="errorTip">
+		Category name can not be empty!
+	</div>
+	
 	<div class="categorysTitleDiv">
 		Category
 	</div>
+	
 	<div class="tableDiv">
 		<table class="categoryTable">
 			
-				<tr class="odd">
+				<tr>
 					<th>Name</th>
 					<th>Articles</th>
 					<th>Operations</th>
 				</tr>
 			
-		
-				<tr class="even">
-					<td>Learning Notes</td>
-					<td>2</td>
-					<td><a href="" class="editLink">edit</a><a href="" class="deleteLink">delete</a></td>
-				</tr>
-				<tr class="odd">
-					<td>Codes</td>
-					<td>3</td>
-					<td><a href="" class="editLink">edit</a><a href="" class="deleteLink"">delete</a></td>
-				</tr>
+				<%
+					List<Entity> categoryList = (List<Entity>)request.getSession().getAttribute("allCategoryList");
+					Iterator<Entity> itr = categoryList.iterator();
+					while(itr.hasNext()){
+						Entity category = itr.next();
+						ArticleFetcher fetcher = new ArticleFetcher();
+						int articleNum = fetcher.getArticlesCountByOwnerIdAndCategoryId((Long)request.getSession().getAttribute("currentUserId"), category.getKey().getId());
+						%>
+						<tr id="<%=category.getKey().getId()%>">
+							<td><%=category.getProperty(Category.NAME) %></td>
+							<td><%=articleNum %></td>
+							<td><a href="" class="editLink">edit</a><a href="" class="deleteLink">delete</a></td>
+						</tr>
+						<% 
+					}
+				%>
+				
 		
 		</table>
 	</div>
@@ -161,23 +187,66 @@
 <script type="text/javascript">
 	$(function(){
 		
+		$(".categoryTable tr:odd").addClass("odd");
+		$(".categoryTable tr:even").addClass("even");
 		$(".addButton").on("mouseover", function() {
 			$(this).css("background-color", "#67B021");
 		});
 		$(".addButton").on("mouseout", function() {
 			$(this).css("background-color", "#459E00");
 		});
+		$(".addButton").on("click", function() {
+			$(".errorTip").css("display","none");
+			if($.trim($("#cateNameText").val())==""){
+				$(".errorTip").css("display","block");
+			}else{
+				$.get(
+					"/addCategory",
+					{categoryName:$.trim($("#cateNameText").val())},
+					function(data){
+						if(data!=-1){
+							if($($(".categoryTable").find("tr:last")).hasClass("odd")){
+								$('<tr class="even" id="'+data+'" ><td>'+$.trim($("#cateNameText").val())+'</td><td>0</td><td><a href="" class="editLink">edit</a><a href="" class="deleteLink"">delete</a></td></tr>').insertAfter($($(".categoryTable").find("tr:last")));
+							}else{
+								if($($(".categoryTable").find("tr:last")).hasClass("even")){
+									$('<tr class="odd" id="'+data+'" ><td>'+$.trim($("#cateNameText").val())+'</td><td>0</td><td><a href="" class="editLink">edit</a><a href="" class="deleteLink"">delete</a></td></tr>').insertAfter($($(".categoryTable").find("tr:last")));
+								}
+							}
+							addEditDeleteAction();
+							$("#cateNameText").val("");
+						}
+					});
+			}
+		});
+		addEditDeleteAction();
+	});
+	function addEditDeleteAction(){
 		$(".editLink").on("click",function(){
 			$( "#dialog-form" ).dialog( "open" );
+			categoryId = $.trim($($(this).parent().parent()).attr("id"));
+			currentCatTr = $(this).parent().parent();
+			$("#categoryName").val($.trim($($($(this).parent().parent()).find("td")[0]).text()));
 			return false;
 		});
 		$(".deleteLink").on("click",function(){
+			categoryId = $.trim($($(this).parent().parent()).attr("id"));
 			$( "#dialog-confirm" ).dialog({
 				resizable: false,
 				height:180,
 				modal: true,
 				buttons: {
 					"Delete": function() {
+						$.get(
+							"/deleteCategory",
+							{"categoryId":categoryId},
+							function(data){
+								if(data=="-1"){
+									alert("Delete category error. Please try again later.");
+								}else{
+									
+								}
+							}
+						);
 						$( this ).dialog( "close" );
 					},
 					Cancel: function() {
@@ -185,17 +254,18 @@
 					}
 				}
 			});
-			$( "#dialog-message").dialog({
+			/*$( "#dialog-message").dialog({
 				modal: true,
 				buttons: {
 					Ok: function() {
 						$( this ).dialog( "close" );
 					}
 				}
-			});
+			});*/
 			return false;
 		});
-	});
+	}
+	
 	$( "#dialog-form" ).dialog({
 		autoOpen: false,
 		height: 200,
@@ -204,21 +274,28 @@
 		buttons: {
 			"Confirm": function() {
 				var bValid = $.trim($("#categoryName").val())=="";
-	
 				if ( bValid ) {
 					$("#errorTip").css("display","block");
 				}else{
 					$("#errorTip").css("display","none");
-					//add category to repository
-					var successFlag = true;
-					if(successFlag){
-						$("#successTip").css("display","block");
-						setTimeout(function () {
-							$( "#dialog-form" ).dialog( "close" );
-						}, 1000);
-					}else{
-						$("#errorTip2").css("display","block");
-					}
+					var newName = $("#categoryName").val();
+					$.get(
+						"/updateCategory",
+						{"newName":$.trim($("#categoryName").val()),"categoryId":categoryId},
+						function(data){
+							if(data!="-1"){
+								$("#successTip").css("display","block");
+								setTimeout(function () {
+									$( "#dialog-form" ).dialog( "close" );
+								}, 1000);
+								$($(currentCatTr).find("td")[0]).text(newName);
+							}else{
+								$("#errorTip2").css("display","block");
+							}
+						}
+					);
+					
+					
 				}
 			},
 			Cancel: function() {
@@ -237,3 +314,8 @@
 
 </body>
 </html>
+
+<%
+	}
+}
+%>

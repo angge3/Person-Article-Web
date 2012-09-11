@@ -101,7 +101,7 @@
 		</div>
 		<div class="navigatorDiv">
 			<ul class="lavaLamp">
-	            <li><a href="/allPost?limitNum=20&offset=0">Homepage</a></li>
+	            <li><a href="../post/allPosts.jsp">Homepage</a></li>
 	            <li><a href="../post/makePost.jsp">Do Post</a></li>
 	            <li><a href="../category/manageCategory.jsp">Category Management</a></li>
 	            <li><a href="../password/changePassword.jsp">Change Password</a></li>
