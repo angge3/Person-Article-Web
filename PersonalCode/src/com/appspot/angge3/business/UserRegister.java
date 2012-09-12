@@ -8,4 +8,8 @@ public class UserRegister {
 		UserDao userDao = new UserDao();
 		userDao.insertUserEntity(email, MD5.md(password));
 	}
+	public void updateUser(long userId,String email,String password){
+		UserDao userDao = new UserDao();
+		userDao.updateUserEntity(userId,email, MD5.md(password));
+	}
 }

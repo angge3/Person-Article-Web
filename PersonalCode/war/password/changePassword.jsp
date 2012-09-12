@@ -82,7 +82,7 @@
 <div class="oldPasswordDiv">
 	<label for="oldPassword">Old Password</label>
 	<input type="password" name="oldPassword" class="inputText" id="oldPassword" size="30"/>
-	<a href="" class="fetchPasswordLink">Forgot your password?</a>
+	<a href="resetPassword.jsp" class="fetchPasswordLink">Forgot your password?</a>
 </div>
 <div class="errorTip1">
 	Old password can not be empty!
@@ -108,7 +108,10 @@
 	<button class="confirmButton">Confirm</button>
 </div>
 <div id="dialog" title="Password Changed Successfully" style="display:none">
-	<p>Password changed successfully! Redirecting to homepage.</p>
+	<p>Password changed successfully! Redirecting to login page.</p>
+</div>
+<div id="errorDialog" title="Change Password Error" style="display:none">
+	<p>Change password error. Please try again later.</p>
 </div>
 <script src="../js/jquery/jquery-ui-1.8.23.custom/jquery-ui-1.8.23.custom.min.js"></script>
 <script type="text/javascript">
@@ -140,20 +143,40 @@
 					if($.trim($("#retypeNewPassword").val())!=$.trim($("#newPassword").val())){
 						$(".errorTip3").css("display","block");
 					}else{
-						//validate old password
-						var oldPasswordFlag = true;
-						if(!oldPasswordFlag){
-							$(".errorTip4").css("display","block");
-						}else{
-							//change password
-							$( "#dialog" ).dialog({
-								modal: true,
-								close: function() {
-									//doredirect
+						$.get(
+							"/validatePassword",
+							{"oldPassword":$("#oldPassword").val()},
+							function(data){
+								if(data=="1"){
+									$.get(
+										"/updatePassword",
+										{"newPassword":$("#newPassword").val()},
+										function(result){
+											if(result!="1"){
+												$( "#errorDialog" ).dialog({
+													modal: true,
+												});
+											}else{
+												$( "#dialog" ).dialog({
+													modal: true,
+													close: function() {
+														window.location = "../login.jsp";
+													}
+												});
+												setTimeout(function () {
+													window.location = "../login.jsp";
+												}, 1000);
+												
+											}
+										}
+									);
+									
+								}else{
+									$(".errorTip4").css("display","block");
 								}
-							});
-							//do redirect
-						}
+							}
+						);
+						
 					}
 				}
 			}

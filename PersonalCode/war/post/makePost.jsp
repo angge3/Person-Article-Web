@@ -132,7 +132,7 @@
 			<input type="text" name="title" size="40" style="margin-right:270px;"/>
 			post it on
 			<select name="category" style="margin-left:10px;margin-right:40px;">
-				<option value="1">Learning Notes</option>
+				<option value="51">Learning Notes</option>
 				<option value="2">AlgorithmCodes</option>
 			</select>
 			<a href="" class="createCategoryLink">Create Category</a>

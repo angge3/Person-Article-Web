@@ -54,4 +54,21 @@ public class UserDao {
 			}
 		}
 	}
+	
+	public void updateUserEntity(long userId,String email,String passwordDigest){
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Transaction txn = datastore.beginTransaction();
+		try {
+			Entity user = new Entity(User.KIND_NAME,userId, User.ANCESTOR_KEY);
+			user.setProperty(User.USER_EMAIL, email);
+			user.setProperty(User.PASSWORD, passwordDigest);
+			datastore.put(user);
+			txn.commit();
+		} finally {
+			if (txn.isActive()) {
+				txn.rollback();
+			}
+		}
+	}
 }

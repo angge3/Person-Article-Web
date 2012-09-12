@@ -67,6 +67,33 @@
   <url-pattern>/deleteCategory</url-pattern>
 </servlet-mapping>
  
+ <servlet>
+  <servlet-name>ValidatePasswordServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.ValidatePasswordServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>ValidatePasswordServlet</servlet-name>
+  <url-pattern>/validatePassword</url-pattern>
+</servlet-mapping>
+
+ <servlet>
+  <servlet-name>UpdatePasswordServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.ChangePasswordServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>UpdatePasswordServlet</servlet-name>
+  <url-pattern>/updatePassword</url-pattern>
+</servlet-mapping>
+
+ <servlet>
+  <servlet-name>SendEmailServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.SendEmailServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>SendEmailServlet</servlet-name>
+  <url-pattern>/sendEmail</url-pattern>
+</servlet-mapping>
+ 
  <welcome-file-list>
      <welcome-file>login.jsp</welcome-file>
  </welcome-file-list>

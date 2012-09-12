@@ -220,6 +220,7 @@
 		});
 		addEditDeleteAction();
 	});
+	
 	function addEditDeleteAction(){
 		$(".editLink").on("click",function(){
 			$( "#dialog-form" ).dialog( "open" );
@@ -230,39 +231,43 @@
 		});
 		$(".deleteLink").on("click",function(){
 			categoryId = $.trim($($(this).parent().parent()).attr("id"));
-			$( "#dialog-confirm" ).dialog({
-				resizable: false,
-				height:180,
-				modal: true,
-				buttons: {
-					"Delete": function() {
-						$.get(
-							"/deleteCategory",
-							{"categoryId":categoryId},
-							function(data){
-								if(data=="-1"){
-									alert("Delete category error. Please try again later.");
-								}else{
-									
+			if($.trim($($($(this).parent().parent()).find("td")[1]).text())>0){
+				$( "#dialog-message").dialog({
+					modal: true,
+					buttons: {
+						Ok: function() {
+							$( this ).dialog( "close" );
+						}
+					}
+				});
+
+			}else{
+				$( "#dialog-confirm" ).dialog({
+					resizable: false,
+					height:180,
+					modal: true,
+					buttons: {
+						"Delete": function() {
+							$.get(
+								"/deleteCategory",
+								{"categoryId":categoryId},
+								function(data){
+									if(data=="-1"){
+										alert("Delete category error. Please try again later.");
+									}else{
+										window.location="/allCategory";
+									}
 								}
-							}
-						);
-						$( this ).dialog( "close" );
-					},
-					Cancel: function() {
-						$( this ).dialog( "close" );
+							);
+							$( this ).dialog( "close" );
+						},
+						Cancel: function() {
+							$( this ).dialog( "close" );
+						}
 					}
-				}
-			});
-			/*$( "#dialog-message").dialog({
-				modal: true,
-				buttons: {
-					Ok: function() {
-						$( this ).dialog( "close" );
-					}
-				}
-			});*/
-			return false;
+				});
+			}
+					return false;
 		});
 	}
 	
@@ -271,33 +276,15 @@
 		height: 200,
 		width: 350,
 		modal: true,
+		/*open: function() { 
+			$(this).bind("keypress.ui-dialog", function(event) { 
+				if (event.keyCode == $.ui.keyCode.ENTER) { 
+					confirmAction();
+				} 
+			}); 
+		}, */
 		buttons: {
-			"Confirm": function() {
-				var bValid = $.trim($("#categoryName").val())=="";
-				if ( bValid ) {
-					$("#errorTip").css("display","block");
-				}else{
-					$("#errorTip").css("display","none");
-					var newName = $("#categoryName").val();
-					$.get(
-						"/updateCategory",
-						{"newName":$.trim($("#categoryName").val()),"categoryId":categoryId},
-						function(data){
-							if(data!="-1"){
-								$("#successTip").css("display","block");
-								setTimeout(function () {
-									$( "#dialog-form" ).dialog( "close" );
-								}, 1000);
-								$($(currentCatTr).find("td")[0]).text(newName);
-							}else{
-								$("#errorTip2").css("display","block");
-							}
-						}
-					);
-					
-					
-				}
-			},
+			"Confirm": confirmAction,
 			Cancel: function() {
 				$( this ).dialog( "close" );
 				
@@ -310,6 +297,34 @@
 			$("#errorTip2").css("display","none");
 		}
 	});
+	
+	function confirmAction() {
+		var bValid = $.trim($("#categoryName").val())=="";
+		if ( bValid ) {
+			$("#errorTip").css("display","block");
+		}else{
+			$("#errorTip").css("display","none");
+			var newName = $("#categoryName").val();
+			$.get(
+				"/updateCategory",
+				{"newName":$.trim($("#categoryName").val()),"categoryId":categoryId},
+				function(data){
+					if(data!="-1"){
+						$("#successTip").css("display","block");
+						setTimeout(function () {
+							$( "#dialog-form" ).dialog( "close" );
+						}, 1000);
+						$($(currentCatTr).find("td")[0]).text(newName);
+						window.location="/allCategory";
+					}else{
+						$("#errorTip2").css("display","block");
+					}
+				}
+			);
+			
+			
+		}
+	}
 </script>
 
 </body>

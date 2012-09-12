@@ -15,7 +15,6 @@
 	}
 	.emailDiv{
 		margin-top:30px;
-		display:none;
 	}
 	.emailSpan{
 		color:green;
@@ -59,6 +58,8 @@
 	}
 </style>
 <title>Reset Password</title>
+<link rel="stylesheet" href="../js/jquery/jquery-ui-1.8.23.custom/css/south-street/jquery-ui-1.8.23.custom.css">
+
 <%@ include file="../common/header.jsp"%>
 <div class="mainContent">
 	<div class="title">
@@ -66,21 +67,36 @@
 	</div>
 	<div class="separateLine">
 	</div>
-	<div class="emailDiv">
-		<span>Your email is : </span>
-		<span class="emailSpan">angge3@gmail.com</span>
-	</div>
-	<div class="accountEmailDiv">
-		<label for="email">Account email</label>
-		<input type="text" class="emailInput" name="email" id="email"/>
-	</div>
-	<div class="emailValidError">
-		Not a valid email!
-	</div>
+	<%
+		if(session.getAttribute("currentUserEmail")!=null){
+			%>
+			<div class="emailDiv">
+				<span>Your email is : </span>
+				<span class="emailSpan"><%=(String)session.getAttribute("currentUserEmail") %></span>
+			</div>
+			<%
+		}else{
+			%>
+			<div class="accountEmailDiv">
+				<label for="email">Account email</label>
+				<input type="text" class="emailInput" name="email" id="email"/>
+			</div>
+			<div class="emailValidError">
+				Not a valid email!
+			</div>
+			<%
+		}
+	%>
+	
+	
 	<div class="sendUrlButtonDiv">
 		<button class="resetButton">Send password reset url</button>
 	</div>
 </div>
+<div id="dialog" title="Password reset url sent" style="display:none">
+	<p>Password reset url has been sent to your email. Please check it.</p>
+</div>
+<script src="../js/jquery/jquery-ui-1.8.23.custom/jquery-ui-1.8.23.custom.min.js"></script>
 <script type="text/javascript">
 	$(function(){
 		$(".resetButton").on("mouseover", function() {
@@ -97,13 +113,30 @@
 			}
 		});
 		$(".resetButton").on("click",function(){
-			$(".emailValidError").css("display","none");
-			var format = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-			var result = format.exec($.trim($("#email").val()));
-			if(result==null){
-				$(".emailValidError").css("display","block");
+			if($(".emailValidError").length>0){
+				$(".emailValidError").css("display","none");
+				var format = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+				var result = format.exec($.trim($("#email").val()));
+				if(result==null){
+					$(".emailValidError").css("display","block");
+				}else{
+					
+				}
 			}else{
-				
+				var email = $.trim($(".emailSpan").text());
+				$.get(
+					"/sendEmail",
+					{"toEmail":email},
+					function(data){
+						if(data=="1"){
+							$( "#dialog" ).dialog({
+								modal: true,
+							});
+						}else{
+							alert("Password rest url sent error. Please try again later.");
+						}
+					}
+				);
 			}
 		});
 			

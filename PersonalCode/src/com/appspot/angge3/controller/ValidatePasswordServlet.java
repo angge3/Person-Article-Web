@@ -7,20 +7,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.appspot.angge3.business.CategoryPoster;
+import com.appspot.angge3.business.UserValidator;
 
-public class DeleteCategoryServlet extends HttpServlet{
+public class ValidatePasswordServlet extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		boolean deleteSucc = new CategoryPoster().deleteCategory(Long.parseLong(req.getParameter("categoryId")));
-		if(deleteSucc){
-			req.getSession().removeAttribute("allCategoryList");
+		
+		if(new UserValidator().validate((String)req.getSession().getAttribute("currentUserEmail"), req.getParameter("oldPassword"))){
 			resp.getWriter().write("1");
-		}
-		else{
+		}else{
 			resp.getWriter().write("-1");
 		}
 	}
@@ -29,7 +27,7 @@ public class DeleteCategoryServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(req, resp);
+		doGet(req,resp);
 	}
-	
+
 }
