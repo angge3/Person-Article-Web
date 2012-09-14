@@ -1,25 +1,46 @@
 package com.appspot.angge3.business;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
+
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
 import com.appspot.angge3.dao.PasswordResetTokenDao;
-import com.appspot.angge3.util.email.MailSenderInfo;
-import com.appspot.angge3.util.email.SimpleMailSender;
 
 public class EmailSender {
-	public void sendEmail(String toEmail,String resetPasswordToken){
+	public void sendEmail(String toEmail,String resetPasswordToken) throws UnsupportedEncodingException{
 		
 		 new PasswordResetTokenDao().insertNewToken(toEmail, resetPasswordToken);
-		 MailSenderInfo mailInfo = new MailSenderInfo();   
-	     mailInfo.setMailServerHost("smtp.163.com");   
-	     mailInfo.setMailServerPort("25");   
-	     mailInfo.setValidate(true);   
-	     mailInfo.setUserName("angge33@163.com");   
-	     mailInfo.setPassword("081251011");
-	     mailInfo.setFromAddress("angge33@163.com");   
-	     mailInfo.setToAddress(toEmail);   
-	     mailInfo.setSubject("Reset your password on Personal Code Web Site");   
-	     mailInfo.setContent("Click <a href=\""+"http://localhost:8888/password/resetPassword.jsp?email="+toEmail+"token="+resetPasswordToken+"\">here</a> to reset your password.");   
-	     SimpleMailSender sms = new SimpleMailSender();  
-	     sms.sendTextMail(mailInfo);
-	     sms.sendHtmlMail(mailInfo);
+		 Properties props = new Properties();
+		 Session session = Session.getDefaultInstance(props, null);
+		 String msgBody = "Click <a href=\""+"http://localhost:8888/password/resetPassword.jsp?email="+toEmail+"&token="+resetPasswordToken+"\">here</a> to reset your password.";
+		 try {
+			Message msg = new MimeMessage(session);
+			msg.setFrom(new InternetAddress("angge3@gmail.com", "Personal Code Admin"));
+			msg.addRecipient(Message.RecipientType.TO,new InternetAddress(toEmail));
+			Multipart mainPart = new MimeMultipart();   
+		    BodyPart html = new MimeBodyPart();   
+		    html.setContent(msgBody, "text/html; charset=utf-8");   
+		    mainPart.addBodyPart(html);   
+		    msg.setContent(mainPart); 
+			msg.setSubject("Reset your password on Personal Code Web Site");
+			Transport.send(msg);
+			
+		} catch (AddressException e) {
+				e.printStackTrace();
+		} catch (MessagingException e) {
+				e.printStackTrace();
+		}
+		;
 	}
 }

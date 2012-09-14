@@ -91,8 +91,13 @@
 		display:none;
 	}
 </style>
-
-<title>All Posts</title>
+<%
+	String tempCategoryName = "";
+	if(request.getParameter("categoryName")!=null){
+		tempCategoryName = request.getParameter("categoryName");
+	}
+%>
+<title>Posts in <%=tempCategoryName%></title>
 <script type="text/javascript" src="../js/jquery/jquery-1.8.0.min.js"></script>
 <link rel="stylesheet" href="../css/ui.totop.css" />
 <script type="text/javascript" src="../syntaxhighlighter/scripts/shCore.js"></script>
@@ -117,7 +122,7 @@
 </div>
 <div class="mainContent">
 	<div class="title">
-		All Posts
+		Posts in <span><%=tempCategoryName %></span>
 	</div>
 	<%
 		long ownerId = 0L;
@@ -126,14 +131,18 @@
 		}
 		int pages = 1;
 		int limitNum = 20;
+		long tempCategoryId = 0;
 		if(request.getParameter("page")!=null){
 			pages = Integer.parseInt(request.getParameter("page"));
 		}
 		if(request.getParameter("limitNum")!=null){
 			limitNum = Integer.parseInt(request.getParameter("limitNum"));
 		}
+		if(request.getParameter("categoryId")!=null){
+			tempCategoryId = Long.parseLong(request.getParameter("categoryId"));
+		}
 		ArticleFetcher fetcher = new ArticleFetcher();
-		List<Entity> articleList = fetcher.getArticlesByOwnerId(ownerId, (pages-1)*limitNum, limitNum);
+		List<Entity> articleList = fetcher.getArticlesByOwnerIdAndCategoryId(ownerId,tempCategoryId, (pages-1)*limitNum, limitNum);
 
 		Iterator<Entity> iterator = articleList.iterator();
 		while(iterator.hasNext()){
@@ -147,7 +156,7 @@
 			          	CategoryFetcher fetcher2 = new CategoryFetcher();
 			          	String categoryName = fetcher2.getNameById(categoryId);
 			          %>
-			          <span class="categorySpan">Category : <a href="./postsByCategory.jsp?categoryId=<%=categoryId%>&categoryName=<%=categoryName%>" class="categoryLink"><%=categoryName %></a></span>
+			          <span class="categorySpan">Category : <a href="" class="categoryLink"><%=categoryName %></a></span>
 		            </div>
 		            <div class="contentDiv">
 		              <%
@@ -182,16 +191,16 @@
 		              <%
 		              	long articleId = article.getKey().getId();
 		              %>
-		               <div class="editAndDeleteDiv" id="<%=articleId%>"><a href="" class="editLink">edit</a><a href="" class="deleteLink">delete</a></div>
+		            <div class="editAndDeleteDiv" id="<%=articleId%>"><a href="" class="editLink">edit</a><a href="" class="deleteLink">delete</a></div>
 		            </div>
 	           </div>
 			<%
 		}
 	%>
 	 <div class="empty">
-	 	You have not written any articles.
+	 	There are no articles in this category.
 	 </div>
-	 <a id="next" href="../post/allPosts.jsp?page=2&limitNum=20"></a>
+	 <a id="next" href="../post/allPosts.jsp?page=2&limitNum=20&categoryId=<%=tempCategoryId%>&categoryName=<%=tempCategoryName%>"></a>
 	
 	
 
@@ -213,10 +222,8 @@
 	  		$(".empty").css("display","block");
 	  	}
 	  	
-	  	$('.editLink').on("click",function(){
-	  		var articleId = $($(this).parent()).attr("id");
-	  		window.location="/editPost?articleId="+articleId;
-	  		return false;
+		$('.editLink').on("click",function(){
+	  		
 	  	});
 	  	
 		$('.deleteLink').on("click",function(){
@@ -248,7 +255,6 @@
 			});
 	  		return false;
 	  	});
-	  	
 	});
 </script>
 </div>

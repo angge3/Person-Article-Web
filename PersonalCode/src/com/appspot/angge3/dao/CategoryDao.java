@@ -3,6 +3,7 @@ package com.appspot.angge3.dao;
 import java.util.List;
 
 import com.appspot.angge3.model.Category;
+import com.appspot.angge3.model.User;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -11,6 +12,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Transaction;
 
@@ -21,6 +23,19 @@ public class CategoryDao {
 		Entity category = datastore.get(KeyFactory.createKey(Category.ANCESTOR_KEY,Category.KIND_NAME,categoryId));
 		return category;
 	
+	}
+	
+	public List<Entity> getCategoryByNameAndOwnerId(String categoryName,long ownerId){
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query q = new Query(Category.KIND_NAME);
+		q.setAncestor(Category.ANCESTOR_KEY);
+		q.setFilter(CompositeFilterOperator.and(
+				new FilterPredicate(Category.NAME,Query.FilterOperator.EQUAL, categoryName),
+				new FilterPredicate(Category.OWNER_ID,Query.FilterOperator.EQUAL, ownerId)
+		));
+		PreparedQuery pq = datastore.prepare(q);
+		return pq.asList(FetchOptions.Builder.withDefaults());
 	}
 	
 	public Entity insertCategory(String name,long ownerId){

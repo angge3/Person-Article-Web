@@ -94,6 +94,24 @@
   <url-pattern>/sendEmail</url-pattern>
 </servlet-mapping>
  
+<servlet>
+  <servlet-name>DeleteArticleServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.DeleteArticleServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>DeleteArticleServlet</servlet-name>
+  <url-pattern>/deleteArticle</url-pattern>
+</servlet-mapping>
+ 
+<servlet>
+  <servlet-name>EditPostServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.EditPostServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>EditPostServlet</servlet-name>
+  <url-pattern>/editPost</url-pattern>
+</servlet-mapping> 
+ 
  <welcome-file-list>
      <welcome-file>login.jsp</welcome-file>
  </welcome-file-list>

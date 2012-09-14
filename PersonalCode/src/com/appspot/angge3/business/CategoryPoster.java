@@ -17,4 +17,8 @@ public class CategoryPoster {
 		CategoryDao categoryDao = new CategoryDao();
 		return categoryDao.deleteCategoryById(categoryId);
 	}
+	
+	public boolean isExist(String categoryName,long ownerId){
+		return !(new CategoryDao().getCategoryByNameAndOwnerId(categoryName,ownerId).isEmpty());
+	}
 }

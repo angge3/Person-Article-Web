@@ -20,8 +20,12 @@ public class UpdateCategoryServlet extends HttpServlet{
 		long categoryId = Long.parseLong(req.getParameter("categoryId"));
 		CategoryPoster poster = new CategoryPoster();
 		try {
-			poster.updateCategory(newName, categoryId);
-			resp.getWriter().write("1");
+			if(poster.isExist(newName,(Long)req.getSession().getAttribute("currentUserId"))){
+				resp.getWriter().write("-2");
+			}else{
+				poster.updateCategory(newName, categoryId);
+				resp.getWriter().write("1");
+			}
 		} catch (EntityNotFoundException e) {
 			// TODO Auto-generated catch block
 			resp.getWriter().write("-1");
@@ -33,7 +37,7 @@ public class UpdateCategoryServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(req,resp);
+		
 	}
 	
 }

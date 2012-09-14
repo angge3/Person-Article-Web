@@ -10,4 +10,15 @@ public class ArticlePoster {
 		ArticleDao articleDao = new ArticleDao();
 		articleDao.insertArticleEntity(title, categoryId, content, date, ownerId);
 	}
+	
+	public void deleteArticle(long articleId){
+		ArticleDao articleDao = new ArticleDao();
+		articleDao.deleteArticleById(articleId);
+	}
+	
+	public void updateArticle(String title,long categoryId,Text content,Date date,long ownerId,long articleId){
+		ArticleDao articleDao = new ArticleDao();
+		articleDao.updateArticleEntity(title, categoryId, content, date, ownerId, articleId);
+		
+	}
 }

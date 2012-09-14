@@ -24,13 +24,18 @@ public class AddCategoryServlet extends HttpServlet{
 			if(categoryName!=null){
 				long ownerId = (Long)req.getSession().getAttribute("currentUserId");
 				CategoryPoster poster = new CategoryPoster();
-				Entity category = poster.insertCategory(categoryName, ownerId);
-				List<Entity> allCategoryList = (List<Entity>)req.getSession().getAttribute("allCategoryList");
-				allCategoryList.add(category);
-				req.getSession().setAttribute("allCategoryList", allCategoryList);
-				resp.getWriter().write(category.getKey().getId()+"");
+				if(poster.isExist(categoryName,(Long)req.getSession().getAttribute("currentUserId"))){
+					resp.getWriter().write("-2");
+				}else{
+					Entity category = poster.insertCategory(categoryName, ownerId);
+					List<Entity> allCategoryList = (List<Entity>)req.getSession().getAttribute("allCategoryList");
+					allCategoryList.add(category);
+					req.getSession().setAttribute("allCategoryList", allCategoryList);
+					resp.getWriter().write(category.getKey().getId()+"");
+				}
+				
 			}else{
-				resp.getWriter().write(-1);
+				resp.getWriter().write("-1");
 			}
 		}
 	}

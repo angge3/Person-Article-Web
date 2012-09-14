@@ -1,9 +1,11 @@
+<%@page import="com.appspot.angge3.model.Article"%>
 <%@page import="com.appspot.angge3.model.Category"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="com.appspot.angge3.business.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.appengine.api.datastore.Entity" %>
+<%@page import="com.google.appengine.api.datastore.Text" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -108,7 +110,7 @@
 		 $(".lavaLamp li:eq(1)").addClass("current");
 	});
 </script>
-<title>Make a Post</title>
+<title>Edit a Post</title>
 <link rel="stylesheet" href="../js/jquery/jquery-ui-1.8.23.custom/css/south-street/jquery-ui-1.8.23.custom.css">
 
 
@@ -129,27 +131,42 @@
 	</div>
 	<div class="separateLine">
 	</div>
-	<form action="/editPost" method="post">
+	<form action="/makePost" method="post">
 		<div class="titleDiv">
 			Title
 		</div>
-		<div class="titleAndCategoryDiv">
-			<input type="text" name="title" size="40" style="margin-right:270px;"/>
-			post it on
-			<select class="category" name="category" style="margin-left:10px;margin-right:40px;">
-				<%
-				if(session.getAttribute("currentUserId")==null){
-					
+		<%
+				if(session.getAttribute("currentUserId")==null||session.getAttribute("currentArticle")==null){
 				}else{
+					Entity article = (Entity)session.getAttribute("currentArticle");
+					long categoryId = (Long)article.getProperty(Article.CATEGORY_ID);
+			%>
+		<div class="titleAndCategoryDiv">
+			<input type="text" name="title" size="40" value="<%=article.getProperty(Article.TITLE) %>" style="margin-right:270px;"/>
+			post it on
+			
+			<select class="category"  name="category" style="margin-left:10px;margin-right:40px;">
+				<%
+				
+					
 					List<Entity> categoryList = new CategoryFetcher().getAllCategoryByOwnerId((Long)session.getAttribute("currentUserId"));
 					session.setAttribute("allCategoryList", categoryList);
 					Iterator<Entity> itr = categoryList.iterator();
 					while(itr.hasNext()){
 						Entity category = itr.next();
 					%>
-						<option value="<%=category.getKey().getId()%>"><%=category.getProperty(Category.NAME) %></option>
+						<option value="<%=category.getKey().getId()%>"
+						<%
+							if(category.getKey().getId()==categoryId) {
+								%>
+									selected
+								<% 
+							}
+						%>
+						><%=category.getProperty(Category.NAME) %></option>
 					<%
 					}
+					
 				%>
 			
 			</select>
@@ -158,8 +175,8 @@
 		<div class="titleDiv">
 			Content
 		</div>
-		<textarea id="contentEditor" name="content" style="width:900px;height:350px;">
-			
+		<textarea id="contentEditor" name="content"  style="width:900px;height:350px;">
+			 <%=((Text)article.getProperty(Article.CONTENT)).getValue()%>
 		</textarea>
 		<input type="submit" value="Post" class="postButton" />
 	</form>

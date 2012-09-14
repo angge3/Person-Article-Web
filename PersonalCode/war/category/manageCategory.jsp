@@ -90,7 +90,7 @@
 	#dialog-form, #dialog-confirm,#dialog-message{
 		display:none;
 	}
-	.errorTip{
+	.errorTip,.errorTip3{
 		color:red;
 		font-style:italic;
 		display:none;
@@ -119,6 +119,7 @@
 		<div style="margin-top:10px;color:red;font-style: italic;display:none" id="errorTip">Category name can not be empty!</div>
 		<div style="margin-top:10px;color:green;font-weight:bold;display:none" id="successTip">Change Successfully!</div>
 		<div style="margin-top:10px;color:red;font-style:italic;display:none" id="errorTip2">Some error happend. Please try again later.</div>
+		<div style="margin-top:10px;color:red;font-style:italic;display:none" id="errorTip3">Category already exists.</div>
 	</form>
 </div>
 <div id="dialog-confirm" title="Delete this category?">
@@ -147,7 +148,9 @@
 	<div class="errorTip">
 		Category name can not be empty!
 	</div>
-	
+	<div class="errorTip3">
+		Category already exists!
+	</div>
 	<div class="categorysTitleDiv">
 		Category
 	</div>
@@ -197,6 +200,7 @@
 		});
 		$(".addButton").on("click", function() {
 			$(".errorTip").css("display","none");
+			$(".errorTip3").css("display","none");
 			if($.trim($("#cateNameText").val())==""){
 				$(".errorTip").css("display","block");
 			}else{
@@ -204,16 +208,20 @@
 					"/addCategory",
 					{categoryName:$.trim($("#cateNameText").val())},
 					function(data){
-						if(data!=-1){
-							if($($(".categoryTable").find("tr:last")).hasClass("odd")){
-								$('<tr class="even" id="'+data+'" ><td>'+$.trim($("#cateNameText").val())+'</td><td>0</td><td><a href="" class="editLink">edit</a><a href="" class="deleteLink"">delete</a></td></tr>').insertAfter($($(".categoryTable").find("tr:last")));
+						if(data!="-1"){
+							if(data=="-2"){
+								$(".errorTip3").css("display","block");
 							}else{
-								if($($(".categoryTable").find("tr:last")).hasClass("even")){
-									$('<tr class="odd" id="'+data+'" ><td>'+$.trim($("#cateNameText").val())+'</td><td>0</td><td><a href="" class="editLink">edit</a><a href="" class="deleteLink"">delete</a></td></tr>').insertAfter($($(".categoryTable").find("tr:last")));
+								if($($(".categoryTable").find("tr:last")).hasClass("odd")){
+									$('<tr class="even" id="'+data+'" ><td>'+$.trim($("#cateNameText").val())+'</td><td>0</td><td><a href="" class="editLink">edit</a><a href="" class="deleteLink"">delete</a></td></tr>').insertAfter($($(".categoryTable").find("tr:last")));
+								}else{
+									if($($(".categoryTable").find("tr:last")).hasClass("even")){
+										$('<tr class="odd" id="'+data+'" ><td>'+$.trim($("#cateNameText").val())+'</td><td>0</td><td><a href="" class="editLink">edit</a><a href="" class="deleteLink"">delete</a></td></tr>').insertAfter($($(".categoryTable").find("tr:last")));
+									}
 								}
+								addEditDeleteAction();
+								$("#cateNameText").val("");
 							}
-							addEditDeleteAction();
-							$("#cateNameText").val("");
 						}
 					});
 			}
@@ -295,6 +303,7 @@
 			$("#successTip").css("display","none");
 			$("#errorTip").css("display","none");
 			$("#errorTip2").css("display","none");
+			$("#errorTip3").css("display","none");
 		}
 	});
 	
@@ -309,16 +318,22 @@
 				"/updateCategory",
 				{"newName":$.trim($("#categoryName").val()),"categoryId":categoryId},
 				function(data){
-					if(data!="-1"){
-						$("#successTip").css("display","block");
-						setTimeout(function () {
-							$( "#dialog-form" ).dialog( "close" );
-						}, 1000);
-						$($(currentCatTr).find("td")[0]).text(newName);
-						window.location="/allCategory";
-					}else{
+					if(data=="-1"){
 						$("#errorTip2").css("display","block");
+					}else{
+						if(data=="-2"){
+							$("#errorTip3").css("display","block");
+						}else{
+							$("#successTip").css("display","block");
+							setTimeout(function () {
+								$( "#dialog-form" ).dialog( "close" );
+							}, 1000);
+							$($(currentCatTr).find("td")[0]).text(newName);
+							window.location="/allCategory";
+						}
 					}
+						
+					
 				}
 			);
 			

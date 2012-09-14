@@ -36,26 +36,7 @@
 		border-radius: 6px;
 		float:left;
 	}
-	.accountEmailDiv{
-		margin-top:30px;
-		position:relative;
-	}
-	.emailInput{
-		width:200px;
-	}
-	.accountEmailDiv label{
-		position:absolute;
-		top:1px;
-		left:2px;
-		font-size:16px;
-		color:#ABACAD;
-		cursor:text;
-	}
-	.emailValidError{
-		color:red;
-		font-style:italic;
-		display:none;
-	}
+	
 </style>
 <title>Reset Password</title>
 <link rel="stylesheet" href="../js/jquery/jquery-ui-1.8.23.custom/css/south-street/jquery-ui-1.8.23.custom.css">
@@ -77,13 +58,7 @@
 			<%
 		}else{
 			%>
-			<div class="accountEmailDiv">
-				<label for="email">Account email</label>
-				<input type="text" class="emailInput" name="email" id="email"/>
-			</div>
-			<div class="emailValidError">
-				Not a valid email!
-			</div>
+			
 			<%
 		}
 	%>
@@ -105,13 +80,7 @@
 		$(".resetButton").on("mouseout", function() {
 			$(this).css("background-color", "#459E00");
 		});
-		$(".emailInput").on("keyup", function() {
-			if($(this).val()!=""){
-				$($($(this).parent()).find("label")).css("display","none");
-			}else{
-				$($($(this).parent()).find("label")).css("display","inline");
-			}
-		});
+		
 		$(".resetButton").on("click",function(){
 			if($(".emailValidError").length>0){
 				$(".emailValidError").css("display","none");
@@ -131,6 +100,11 @@
 						if(data=="1"){
 							$( "#dialog" ).dialog({
 								modal: true,
+								buttons: {
+									"OK": function() {
+										$( this ).dialog( "close" );
+									}
+								},
 							});
 						}else{
 							alert("Password rest url sent error. Please try again later.");
