@@ -1,7 +1,10 @@
 package com.appspot.angge3.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,11 +40,20 @@ public class EditPostServlet extends HttpServlet{
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String title = req.getParameter("title");
+		String date = req.getParameter("date");
+		SimpleDateFormat sdf = new SimpleDateFormat( "EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+		Date originDate = new Date();
+		try {
+			 originDate = sdf.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		long articleId = Long.parseLong(req.getParameter("articleId"));
 		long categoryId = Long.parseLong((req.getParameter("category")));
 		Text content = new Text(req.getParameter("content"));
 		ArticlePoster poster = new ArticlePoster();
-		poster.updateArticle(title, categoryId, content, new Date(),  (Long)(req.getSession().getAttribute("currentUserId")), articleId);
+		poster.updateArticle(title, categoryId, content, originDate,  (Long)(req.getSession().getAttribute("currentUserId")), articleId);
 		resp.sendRedirect("./post/allPosts.jsp");
 	}
 	

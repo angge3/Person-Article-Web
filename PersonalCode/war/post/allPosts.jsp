@@ -138,6 +138,7 @@
 		Iterator<Entity> iterator = articleList.iterator();
 		while(iterator.hasNext()){
 			Entity article = iterator.next();
+          	long articleId = article.getKey().getId();
 			%>
 				<div class="articleDigestDiv">
 		            <div class="titleAndCategoryDiv">
@@ -154,13 +155,20 @@
 		              		String content = ((Text)article.getProperty(Article.CONTENT)).getValue();
 		              		String digest = "";
 		              		boolean full = false;
+		              		System.out.println(content);
 		              		if(content.length()<=1000){
 		              			full = true;
 		              			digest = content;
 		              		}else{
 		              			
 		              			int endIndex = content.indexOf("</p>", 999);
-		              			digest = content.substring(0,endIndex+4);
+		              			if(endIndex!=-1){
+		              				digest = content.substring(0,endIndex+4);
+		              			}else{
+		              				
+		              				digest = content.substring(0,999);
+		              			}
+		              			
 		              			
 			              		
 			              		if(digest.split("<pre ").length!=digest.split("</pre>").length)	{
@@ -175,13 +183,11 @@
 			          	if(!full){
 			          %>
 			          <div></div>
-		               <div class="readFullDiv"><a href="" class="readFullLink">read full article</a></div>
+		               <div class="readFullDiv"><a href="/readFullArticle?articleId=<%=articleId %>" class="readFullLink">read full article</a></div>
 		              <%
 			          	}
 		              %> 
-		              <%
-		              	long articleId = article.getKey().getId();
-		              %>
+		              
 		               <div class="editAndDeleteDiv" id="<%=articleId%>"><a href="" class="editLink">edit</a><a href="" class="deleteLink">delete</a></div>
 		            </div>
 	           </div>

@@ -112,6 +112,15 @@
   <url-pattern>/editPost</url-pattern>
 </servlet-mapping> 
  
+ <servlet>
+  <servlet-name>ReadFullArticleServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.ReadFullArticleServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>ReadFullArticleServlet</servlet-name>
+  <url-pattern>/readFullArticle</url-pattern>
+</servlet-mapping> 
+ 
  <welcome-file-list>
      <welcome-file>login.jsp</welcome-file>
  </welcome-file-list>

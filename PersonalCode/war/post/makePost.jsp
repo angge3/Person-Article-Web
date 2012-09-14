@@ -15,7 +15,7 @@
 		margin-bottom:5px;
 	}
 	.titleDiv{
-		margin-top:10px;
+		margin-top:25px;
 		font-size:15px;
 		font-weight:bold;
 		margin-bottom:5px;
@@ -36,9 +36,7 @@
 	.createCategoryLink:active{
 		color:#459E00;
 	}
-	.titleAndCategoryDiv{
-		margin-bottom:20px;
-	}
+	
 	.postButton {
 		border: 1px solid #327E04;
 		background: #459E00;
@@ -70,6 +68,11 @@
 		margin-top:20px;
 	}
 	#dialog-form{
+		display:none;
+	}
+	.errorTip1{
+		color:red;
+		font-style: italic;
 		display:none;
 	}
 </style>
@@ -107,6 +110,14 @@
 		$(".lavaLamp li").removeClass("current");
 		 $(".lavaLamp li:eq(1)").addClass("current");
 	});
+	function checkForm(){
+		if($.trim($(".titleInput").val())==""){
+			$(".errorTip1").css("display","block");
+			return false;
+		}else{
+			return true;
+		}
+	}
 </script>
 <title>Make a Post</title>
 <link rel="stylesheet" href="../js/jquery/jquery-ui-1.8.23.custom/css/south-street/jquery-ui-1.8.23.custom.css">
@@ -129,12 +140,12 @@
 	</div>
 	<div class="separateLine">
 	</div>
-	<form action="/editPost" method="post">
+	<form action="/makePost" method="post" onSubmit="return checkForm();">
 		<div class="titleDiv">
 			Title
 		</div>
 		<div class="titleAndCategoryDiv">
-			<input type="text" name="title" size="40" style="margin-right:270px;"/>
+			<input type="text" name="title" class="titleInput" size="40" style="margin-right:270px;"/>
 			post it on
 			<select class="category" name="category" style="margin-left:10px;margin-right:40px;">
 				<%
@@ -155,13 +166,16 @@
 			</select>
 			<a href="" class="createCategoryLink">Create Category</a>
 		</div>
+		<div class="errorTip1">
+			Article's title can not be empty!
+		</div>
 		<div class="titleDiv">
 			Content
 		</div>
 		<textarea id="contentEditor" name="content" style="width:900px;height:350px;">
 			
 		</textarea>
-		<input type="submit" value="Post" class="postButton" />
+		<input type="submit"  value="Post" class="postButton" />
 	</form>
 	<button class="cancelButton">Cancel</button>
 </div>

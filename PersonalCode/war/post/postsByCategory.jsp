@@ -147,6 +147,7 @@
 		Iterator<Entity> iterator = articleList.iterator();
 		while(iterator.hasNext()){
 			Entity article = iterator.next();
+			long articleId = article.getKey().getId();
 			%>
 				<div class="articleDigestDiv">
 		            <div class="titleAndCategoryDiv">
@@ -184,13 +185,11 @@
 			          	if(!full){
 			          %>
 			          <div></div>
-		               <div class="readFullDiv"><a href="" class="readFullLink">read full article</a></div>
+		               <div class="readFullDiv"><a href="/readFullArticle?articleId=<%=articleId %>" class="readFullLink">read full article</a></div>
 		              <%
 			          	}
 		              %> 
-		              <%
-		              	long articleId = article.getKey().getId();
-		              %>
+		             
 		            <div class="editAndDeleteDiv" id="<%=articleId%>"><a href="" class="editLink">edit</a><a href="" class="deleteLink">delete</a></div>
 		            </div>
 	           </div>

@@ -70,6 +70,29 @@ public class ArticleDao {
 		return pq.asList(FetchOptions.Builder.withLimit(limitNum).offset(offset));
 	}
 	
+	public List<Entity> getAllArticlesByOwnerIdDesc(long ownerId){
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query q = new Query(Article.KIND_NAME).addSort(Article.DATE,SortDirection.DESCENDING);
+		q.setAncestor(Article.ANCESTOR_KEY);
+		q.setFilter(new FilterPredicate(Article.OWNER_ID,
+				Query.FilterOperator.EQUAL, ownerId));
+		PreparedQuery pq = datastore.prepare(q);
+		return pq.asList(FetchOptions.Builder.withDefaults());
+	}
+	
+	public List<Entity> getAllArticlesByOwnerIdAsc(long ownerId){
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query q = new Query(Article.KIND_NAME).addSort(Article.DATE,SortDirection.ASCENDING);
+		q.setAncestor(Article.ANCESTOR_KEY);
+		q.setFilter(new FilterPredicate(Article.OWNER_ID,
+				Query.FilterOperator.EQUAL, ownerId));
+		PreparedQuery pq = datastore.prepare(q);
+		return pq.asList(FetchOptions.Builder.withDefaults());
+	}
+	
+	
 	public List<Entity> getArticlesByOwnerIdAndCategoryId(long ownerId,long categoryId,int offset,int limitNum){
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -115,4 +138,6 @@ public class ArticleDao {
 				.getDatastoreService();
 		return datastore.get(KeyFactory.createKey(Article.ANCESTOR_KEY, Article.KIND_NAME, articleId));
 	}
+
+	
 }
