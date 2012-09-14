@@ -165,7 +165,6 @@
 		              			if(endIndex!=-1){
 		              				digest = content.substring(0,endIndex+4);
 		              			}else{
-		              				
 		              				digest = content.substring(0,999);
 		              			}
 		              			

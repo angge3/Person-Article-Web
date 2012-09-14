@@ -1,8 +1,8 @@
-<!-- Indices written at Fri, 14 Sep 2012 21:02:26 CST -->
+<!-- Indices written at Sat, 15 Sep 2012 00:41:18 CST -->
 
 <datastore-indexes>
 
-    <!-- Used 12 times in query history -->
+    <!-- Used 5 times in query history -->
     <datastore-index kind="Article" ancestor="true" source="auto">
         <property name="ownerId" direction="asc"/>
         <property name="date" direction="desc"/>
@@ -10,9 +10,8 @@
 
     <!-- Used 1 time in query history -->
     <datastore-index kind="Article" ancestor="true" source="auto">
-        <property name="categoryId" direction="asc"/>
         <property name="ownerId" direction="asc"/>
-        <property name="date" direction="desc"/>
+        <property name="date" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

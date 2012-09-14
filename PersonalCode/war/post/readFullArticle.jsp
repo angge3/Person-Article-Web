@@ -166,6 +166,7 @@
 <script type="text/javascript">
 	$(function(){
 	    $().UItoTop({ easingType: 'easeOutQuart' });
+	    $("pre").addClass("toolbar:false");
 		SyntaxHighlighter.all();
 	});
 	$(".deleteLink").on("click",function(){
