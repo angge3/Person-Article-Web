@@ -3,6 +3,7 @@
 <%@page import="com.appspot.angge3.model.*"%>
 <%@page import="com.appspot.angge3.business.*"%>
 <%@page import="com.appspot.angge3.dao.*"%>
+<%@page import="com.appspot.angge3.util.*"%>
 <%@page import="com.google.appengine.api.datastore.Text"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.appengine.api.datastore.Entity" %>
@@ -155,25 +156,13 @@
 		              		String content = ((Text)article.getProperty(Article.CONTENT)).getValue();
 		              		String digest = "";
 		              		boolean full = false;
-		              		System.out.println(content);
 		              		if(content.length()<=1000){
 		              			full = true;
 		              			digest = content;
 		              		}else{
-		              			
-		              			int endIndex = content.indexOf("</p>", 999);
-		              			if(endIndex!=-1){
-		              				digest = content.substring(0,endIndex+4);
-		              			}else{
-		              				digest = content.substring(0,999);
-		              			}
-		              			
-		              			
-			              		
-			              		if(digest.split("<pre ").length!=digest.split("</pre>").length)	{
-			              			digest += "</pre>";
-			              		}
-			              		digest+="\n&nbsp;&nbsp;&nbsp;&nbsp;. . .";	
+		              			digest = content.substring(0,1000);
+		              			digest = DigestConvertor.completeDigest(digest);
+			              		digest+="\n&nbsp;&nbsp;&nbsp;&nbsp;. . .";
 		              		}
 		              		
 		              %>
