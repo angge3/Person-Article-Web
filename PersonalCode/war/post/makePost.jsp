@@ -85,6 +85,8 @@
                 editor = K.create('#contentEditor',{
 					langType : 'en',
 					resizeType : 1,
+					allowUpload : true,
+					uploadJson  : '/uploadFile',
 					items:['bold','italic','underline','fontsize','forecolor','hilitecolor','|','undo','redo','|','insertorderedlist','insertunorderedlist','|','justifyleft','justifycenter','justifyright','justifyfull','|','lineheight','formatblock','|','image','table','hr','emoticons','link','unlink','code','|','preview']
 				});
         });

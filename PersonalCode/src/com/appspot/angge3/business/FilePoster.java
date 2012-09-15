@@ -1,0 +1,9 @@
+package com.appspot.angge3.business;
+
+import com.appspot.angge3.dao.FileDao;
+
+public class FilePoster {
+	public long uploadFile(String content){
+		return new FileDao().insertFileEntity(content);
+	}
+}
