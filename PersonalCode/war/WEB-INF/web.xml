@@ -130,6 +130,15 @@
   <url-pattern>/uploadFile</url-pattern>
 </servlet-mapping>
  
+ <servlet>
+  <servlet-name>GetFileServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.GetFileServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>GetFileServlet</servlet-name>
+  <url-pattern>/getFile</url-pattern>
+</servlet-mapping>
+
  <welcome-file-list>
      <welcome-file>login.jsp</welcome-file>
  </welcome-file-list>

@@ -76,10 +76,9 @@ public class UploadFileServlet extends HttpServlet{
 		while (itr.hasNext()) {
 			Object temp =  itr.next();
 			FileItem item = (FileItem)temp;
-			FileItemStream itemStream = (FileItemStream)temp;
 			String fileName = item.getName();
 			long fileSize = item.getSize();
-			InputStream stream = itemStream.openStream();
+			InputStream stream = item.getInputStream();
 			if (!item.isFormField()) {
 				//检查文件大小
 				if(item.getSize() > maxSize){
@@ -101,7 +100,8 @@ public class UploadFileServlet extends HttpServlet{
 					while((line = reader.readLine())!=null){
 						content+=line;
 					}
-					fileId = new FilePoster().uploadFile(content);
+					System.out.println(content);
+					fileId = new FilePoster().uploadFile(fileName,content);
 				}catch(Exception e){
 					resp.getOutputStream().println(getError("上传文件失败。"));
 					return;
