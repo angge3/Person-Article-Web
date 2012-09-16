@@ -38,12 +38,13 @@ public class UserDao {
 		return pq.asSingleEntity();
 	}
 
-	public void insertUserEntity(String email, String passwordDigest) {
+	public Entity insertUserEntity(String email, String passwordDigest) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		Transaction txn = datastore.beginTransaction();
+		Entity user = null;
 		try {
-			Entity user = new Entity(User.KIND_NAME, User.ANCESTOR_KEY);
+			user = new Entity(User.KIND_NAME, User.ANCESTOR_KEY);
 			user.setProperty(User.USER_EMAIL,email);
 			user.setProperty(User.PASSWORD, passwordDigest);
 			datastore.put(user);
@@ -53,6 +54,7 @@ public class UserDao {
 				txn.rollback();
 			}
 		}
+		return user;
 	}
 	
 	public void updateUserEntity(long userId,String email,String passwordDigest){

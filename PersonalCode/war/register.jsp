@@ -1,6 +1,8 @@
+<%@page import="com.appspot.angge3.model.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="com.appspot.angge3.business.*" %>
+<%@ page import="com.google.appengine.api.datastore.Entity" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -262,7 +264,11 @@ body {
 											$("#emailExistError").css("display","block");
 										<%
 									}else{
-										new UserRegister().registerUser(email, password);
+										Entity user = new UserRegister().registerUser(email, password);
+										new CategoryPoster().insertCategory("Default", user.getKey().getId());
+										session.setAttribute("currentUserEmail", (String)user.getProperty(User.USER_EMAIL));
+										session.setAttribute("currentUserId", user.getKey().getId());
+										response.sendRedirect("./post/allPosts.jsp");
 										//session save and redirect
 									}
 								}

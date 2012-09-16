@@ -10,15 +10,16 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Transaction;
 
 public class FileDao {
-	public long insertFileEntity(String fileName,String content){
+	public long insertFileEntity(String fileName,byte[] content,String contentType){
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		Transaction txn = datastore.beginTransaction();
 		long id = 0;
 		try {
 			Entity file = new Entity(File.KIND_NAME, File.ANCESTOR_KEY);
-			file.setProperty(File.CONTENT, new Blob(content.getBytes()));
+			file.setProperty(File.CONTENT, new Blob(content));
 			file.setProperty(File.TITLE, fileName);
+			file.setProperty(File.CONTENT_TYPE, contentType);
 			datastore.put(file);
 			txn.commit();
 			id =  file.getKey().getId();

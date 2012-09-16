@@ -8,4 +8,5 @@ public final class File {
 	public static final String KIND_NAME = "File";
 	public static final String TITLE = "title";
 	public static final String CONTENT = "content";
+	public static final String CONTENT_TYPE = "contentType";
 }

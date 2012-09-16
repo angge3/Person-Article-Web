@@ -23,8 +23,9 @@ public class GetFileServlet extends HttpServlet{
 		try {
 			Entity fileEntity = new FileFetcher().getFile(fileId);
 			Blob temp = (Blob)fileEntity.getProperty(File.CONTENT);
-			resp.setContentType("binary/octet-stream");
+			resp.setContentType((String)fileEntity.getProperty(File.CONTENT_TYPE));
 			resp.getOutputStream().write((temp.getBytes()));
+		
 		} catch (EntityNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

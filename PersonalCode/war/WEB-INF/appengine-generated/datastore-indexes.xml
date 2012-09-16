@@ -1,0 +1,11 @@
+<!-- Indices written at Sun, 16 Sep 2012 15:15:13 CST -->
+
+<datastore-indexes>
+
+     <datastore-index kind="Article" ancestor="true" source="manual">
+        <property name="categoryId" direction="asc"/>
+        <property name="ownerId" direction="asc"/>
+        <property name="date" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>

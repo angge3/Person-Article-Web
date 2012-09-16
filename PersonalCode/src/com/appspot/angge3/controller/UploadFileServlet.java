@@ -18,10 +18,13 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
+
 
 import com.appspot.angge3.business.FilePoster;
 
@@ -56,63 +59,54 @@ public class UploadFileServlet extends HttpServlet{
 		resp.setContentType("text/html; charset=UTF-8");
 
 		if(!ServletFileUpload.isMultipartContent(req)){
-			resp.getOutputStream().println(getError("请选择文件。"));
+			resp.getOutputStream().println(getError("Please select file."));
 			return;
 		}
 		
 		String dirName = req.getParameter("dir");
-
-		FileItemFactory factory = new DiskFileItemFactory();
-		ServletFileUpload upload = new ServletFileUpload(factory);
+	
+		ServletFileUpload upload = new ServletFileUpload();
 		upload.setHeaderEncoding("UTF-8");
-		List items = null;
+		FileItemIterator items = null;
 		try {
-			items = upload.parseRequest(req);
+			items = upload.getItemIterator(req);
+			while (items.hasNext()) {
+				
+				Object temp =  items.next();
+				FileItemStream item = (FileItemStream)temp;
+				
+				String fileName = item.getName();
+				InputStream stream = item.openStream();
+				if (!item.isFormField()) {
+					byte content[] = IOUtils.toByteArray(stream);
+					//检查文件大小
+					if(content.length > maxSize){
+						resp.getOutputStream().println(getError("File is too large."));
+						return;
+					}
+					//检查扩展名
+					String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+					if(!Arrays.<String>asList(extMap.get(dirName).split(",")).contains(fileExt)){
+					    resp.getOutputStream().println(getError("File type unsupported.\nOnly support " + extMap.get(dirName) + " files."));
+						return;
+					}
+
+					long fileId = new FilePoster().uploadFile(fileName, content,item.getContentType());
+					
+
+					JSONObject obj = new JSONObject();
+					obj.put("error", 0);
+					obj.put("url", "/getFile?fileId="+fileId);
+					resp.getOutputStream().println(obj.toString());
+				}
+			
+			}
 		} catch (FileUploadException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			resp.getOutputStream().println(getError("Upload File Error."));
 		}
-		Iterator itr = items.iterator();
-		while (itr.hasNext()) {
-			Object temp =  itr.next();
-			FileItem item = (FileItem)temp;
-			String fileName = item.getName();
-			long fileSize = item.getSize();
-			InputStream stream = item.getInputStream();
-			if (!item.isFormField()) {
-				//检查文件大小
-				if(item.getSize() > maxSize){
-					resp.getOutputStream().println(getError("上传文件大小超过限制。"));
-					return;
-				}
-				//检查扩展名
-				String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-				if(!Arrays.<String>asList(extMap.get(dirName).split(",")).contains(fileExt)){
-				    resp.getOutputStream().println(getError("上传文件扩展名是不允许的扩展名。\n只允许" + extMap.get(dirName) + "格式。"));
-					return;
-				}
-
-				long fileId = 0;
-				try{
-					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-					String content = "";
-					String line = "";
-					while((line = reader.readLine())!=null){
-						content+=line;
-					}
-					System.out.println(content);
-					fileId = new FilePoster().uploadFile(fileName,content);
-				}catch(Exception e){
-					resp.getOutputStream().println(getError("上传文件失败。"));
-					return;
-				}
-
-				JSONObject obj = new JSONObject();
-				obj.put("error", 0);
-				obj.put("url", "/getFile?fileId="+fileId);
-				resp.getOutputStream().println(obj.toString());
-			}
-		}
+		
 	}
 
 	@Override
