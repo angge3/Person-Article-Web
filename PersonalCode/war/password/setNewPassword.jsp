@@ -101,6 +101,10 @@
 		padding:20px;
 	}
 </style>
+<%
+	String email = request.getParameter("email");
+	String token = request.getParameter("token");
+%>
 <script type="text/javascript">
 	$(function(){
 		$(".inputText").on("keyup", function() {
@@ -125,6 +129,8 @@
 				if($.trim($("#retypeNewPassword").val())!=$.trim($("#newPassword").val())){
 					$(".errorTip3").css("display","block");
 				}else{
+						//verify token
+						
 						//change password
 						$( "#dialog" ).dialog({
 							modal: true,
@@ -148,7 +154,7 @@
 <div class="content">
 	<div class="topDiv">
 			<img alt="logo" src="../image/logo.png" class="logo">
-			<a href="" class="loginLink">Go to login page</a>
+			<a href="../login.jsp" class="loginLink">Go to login page</a>
 	</div>
 	<div class="mainContent">
 		<div class="title">

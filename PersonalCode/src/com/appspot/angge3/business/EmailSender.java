@@ -23,7 +23,7 @@ public class EmailSender {
 		 new PasswordResetTokenDao().insertNewToken(toEmail, resetPasswordToken);
 		 Properties props = new Properties();
 		 Session session = Session.getDefaultInstance(props, null);
-		 String msgBody = "Click <a href=\""+"http://localhost:8888/password/resetPassword.jsp?email="+toEmail+"&token="+resetPasswordToken+"\">here</a> to reset your password.";
+		 String msgBody = "Click <a href=\""+"http://localhost:8888/password/setNewPassword.jsp?email="+toEmail+"&token="+resetPasswordToken+"\">here</a> to reset your password.";
 		 try {
 			Message msg = new MimeMessage(session);
 			msg.setFrom(new InternetAddress("angge3@gmail.com", "Personal Code Admin"));

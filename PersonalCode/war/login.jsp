@@ -221,7 +221,7 @@ body {
 				</div>
 			</form>
 			<div class="forgotPassDiv">
-				<a href="" class="link">Forgot your password?</a>
+				<a href="./password/resetPassword2.jsp" class="link">Forgot your password?</a>
 			</div>
 		</div>
 	</div>
