@@ -18,10 +18,14 @@ public class SendEmailServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String toEmail = req.getParameter("toEmail");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-		new EmailSender().sendEmail(toEmail, MD5.md(toEmail+sdf.format(new Date())));
-		resp.getWriter().write("1");
+		if(req.getSession().getAttribute("currentUserEmail")==null){
+			resp.getWriter().write("-1");
+		}else{
+			String toEmail = req.getParameter("toEmail");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+			new EmailSender().sendEmail(toEmail, MD5.md(toEmail+sdf.format(new Date())));
+			resp.getWriter().write("1");
+		}
 	}
 
 	@Override

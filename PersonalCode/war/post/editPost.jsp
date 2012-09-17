@@ -87,9 +87,11 @@
         var editor;
         KindEditor.ready(function(K) {
                 editor = K.create('#contentEditor',{
-					langType : 'en',
+                	langType : 'en',
 					resizeType : 1,
-					items:['bold','italic','underline','fontsize','forecolor','hilitecolor','|','undo','redo','|','insertorderedlist','insertunorderedlist','|','justifyleft','justifycenter','justifyright','justifyfull','|','lineheight','formatblock','|','image','table','hr','emoticons','link','unlink','code','|','preview']
+					allowUpload : true,
+					uploadJson  : '/uploadFile',
+					items:['bold','italic','underline','fontsize','forecolor','hilitecolor','|','undo','redo','|','insertorderedlist','insertunorderedlist','|','justifyleft','justifycenter','justifyright','justifyfull','|','lineheight','formatblock','|','image','insertfile','table','hr','emoticons','link','unlink','code','|','preview']
 				});
         });
 </script>
@@ -255,6 +257,7 @@
 	
 </script>
 </div>
+<%@ include file="../common/footer.jsp"%>
 </body>
 </html>
 <%

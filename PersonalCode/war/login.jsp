@@ -200,13 +200,13 @@ body {
 	<div class="content">
 		<div class="logo"></div>
 		<div class="loginFormDiv">
-			<form action="login.jsp" method="post">
+			<form action="login.jsp" method="post" autocomplete="off">
 				<div class="emailInput ">
 					<label for="email">Email</label>
 					<input type="text"  name="email" class="inputText"
 						id="email" />
 				</div>
-				<div class="passwordInput ">
+				<div class="passwordInput">
 					<label for="password">Password</label>
 					<input type="password"  name="password"
 						class="inputText" id="password" />
@@ -216,7 +216,7 @@ body {
 				</div>
 				<div class="buttonAndRemember ">
 					<input type="submit" value="Login" class="loginButton" /> <input
-						type="checkbox" name="remember" style="margin-left: 82px; vertical-align: middle" /><span
+						type="checkbox" name="remember" style="margin-left: 82px; vertical-align: middle" value="remember" /><span
 						style="font-size: 13px; color: #7F7F7F">remember me</span>
 				</div>
 			</form>
@@ -226,8 +226,28 @@ body {
 		</div>
 	</div>
 	<%
-		String email = (String)request.getParameter("email");
-		String password = (String)request.getParameter("password");
+		Cookie[] cookies = request.getCookies();
+		String email = "";
+		String password = "";
+		boolean remembered = false;
+		for(Cookie cookie : cookies){
+		    if(cookie.getName().equals("email")){
+		    	email = cookie.getValue(); 
+		    	remembered = true;
+		    }
+		    if(cookie.getName().equals("password")){
+		    	password = cookie.getValue(); 
+		    }
+		   	
+		}
+		
+		if(!remembered){
+			email = request.getParameter("email");
+			password = request.getParameter("password");
+		}
+		
+		String remember = request.getParameter("remember");
+	
 		if(email!=null&&password!=null){
 			//validate
 			UserValidator validator = new UserValidator();
@@ -237,6 +257,12 @@ body {
 				session.setAttribute("currentUserEmail", email);
 				Entity user =  new UserInfoFetcher().getUserByEmail(email);
 				session.setAttribute("currentUserId", user.getKey().getId());
+				if(remember!=null&&remember.equals("remember")){
+					Cookie emailCookie = new Cookie("email",email);
+					Cookie passwordCookie = new Cookie("password",password);
+					response.addCookie(emailCookie);
+					response.addCookie(passwordCookie);
+				}
 				response.sendRedirect("./post/allPosts.jsp");
 			}else{
 				%>

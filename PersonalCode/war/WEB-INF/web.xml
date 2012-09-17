@@ -94,6 +94,15 @@
   <url-pattern>/sendEmail</url-pattern>
 </servlet-mapping>
  
+ <servlet>
+  <servlet-name>SendEmailServletNotLogin</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.SendEmailServletNotLogin</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>SendEmailServletNotLogin</servlet-name>
+  <url-pattern>/sendEmailNotLogin</url-pattern>
+</servlet-mapping>
+ 
 <servlet>
   <servlet-name>DeleteArticleServlet</servlet-name>
   <servlet-class>com.appspot.angge3.controller.DeleteArticleServlet</servlet-class>
@@ -137,6 +146,15 @@
 <servlet-mapping>
   <servlet-name>GetFileServlet</servlet-name>
   <url-pattern>/getFile</url-pattern>
+</servlet-mapping>
+
+ <servlet>
+  <servlet-name>SetNewPasswordServlet</servlet-name>
+  <servlet-class>com.appspot.angge3.controller.SetNewPasswordServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>SetNewPasswordServlet</servlet-name>
+  <url-pattern>/setNewPassword</url-pattern>
 </servlet-mapping>
 
  <welcome-file-list>

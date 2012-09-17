@@ -51,7 +51,7 @@ public class UploadFileServlet extends HttpServlet{
 		extMap.put("image", "gif,jpg,jpeg,png,bmp");
 		extMap.put("flash", "swf,flv");
 		extMap.put("media", "swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb");
-		extMap.put("file", "doc,docx,xls,xlsx,ppt,htm,html,txt,zip,rar,gz,bz2");
+		extMap.put("file", "doc,docx,xls,xlsx,ppt,htm,html,txt,zip,rar,gz,bz2,java,c,cpp");
 
 		//最大文件大小
 		long maxSize = 1000000;

@@ -163,7 +163,7 @@
 				}else{
 					var email = $.trim($("#email").val());
 					$.get(
-						"/sendEmail",
+						"/sendEmailNotLogin",
 						{"toEmail":email},
 						function(data){
 							if(data=="1"){
@@ -197,7 +197,7 @@
 <div class="content">
 	<div class="topDiv">
 			<img alt="logo" src="../image/logo.png" class="logo">
-			<a href="" class="loginLink">Go to login page</a>
+			<a href="../login.jsp" class="loginLink">Go to login page</a>
 	</div>
 	<div class="mainContent">
 		<div class="title">
@@ -216,5 +216,6 @@
 		
 	</div>
 </div>
+<%@ include file="../common/footer.jsp"%>
 </body>
 </html>

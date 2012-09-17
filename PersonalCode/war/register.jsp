@@ -196,7 +196,7 @@ body {
 	<div class="content">
 		<div class="logo"></div>
 		<div class="loginFormDiv">
-			<form action="register.jsp" method="post">
+			<form action="register.jsp" method="post" autocomplete="off">
 				<div class="emailInput ">
 					<label for="email">Email</label>
 					<input type="text" name="email" class="inputText"
@@ -218,7 +218,7 @@ body {
 				</div>
 				<div class="buttonAndRemember ">
 					<input type="submit" value="Start" class="registerButton" /> <input
-						type="checkbox" name="remember" style="margin-left: 82px; vertical-align: middle" /><span
+						type="checkbox" name="remember" value="remember" style="margin-left: 82px; vertical-align: middle" /><span
 						style="font-size: 13px; color: #7F7F7F">remember me</span>
 				</div>
 			</form>
@@ -230,6 +230,7 @@ body {
 		if(method.equalsIgnoreCase("POST")){
 			String email = (String)request.getParameter("email");
 			String password = (String)request.getParameter("password");
+			String remember = (String)request.getParameter("remember");
 			if(email!=null&&password!=null){
 				%>
 				<script type="text/javascript">
@@ -268,6 +269,12 @@ body {
 										new CategoryPoster().insertCategory("Default", user.getKey().getId());
 										session.setAttribute("currentUserEmail", (String)user.getProperty(User.USER_EMAIL));
 										session.setAttribute("currentUserId", user.getKey().getId());
+										if(remember!=null&&remember.equals("remember")){
+											Cookie emailCookie = new Cookie("email",email);
+											Cookie passwordCookie = new Cookie("password",password);
+											response.addCookie(emailCookie);
+											response.addCookie(passwordCookie);
+										}
 										response.sendRedirect("./post/allPosts.jsp");
 										//session save and redirect
 									}
@@ -280,7 +287,5 @@ body {
 		}
  		  %>
  		
-
-	
 </body>
 </html>

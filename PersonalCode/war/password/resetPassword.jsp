@@ -107,7 +107,12 @@
 								},
 							});
 						}else{
-							alert("Password rest url sent error. Please try again later.");
+							if(data=="-1"){
+								alert("This page is overdue. Please login again!");
+								window.location = "../login.jsp";
+							}else{
+								alert("Password rest url sent error. Please try again later.");
+							}
 						}
 					}
 				);
@@ -119,5 +124,6 @@
 	
 </script>
 </div>
+<%@ include file="../common/footer.jsp"%>
 </body>
 </html>

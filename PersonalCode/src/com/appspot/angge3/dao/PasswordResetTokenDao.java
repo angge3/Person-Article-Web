@@ -46,6 +46,18 @@ public class PasswordResetTokenDao {
 		return pq.asSingleEntity();
 	}
 	
+	public Entity getTokenByEmail(String email){
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query q = new Query(PasswordResetToken.KIND_NAME);
+		q.setAncestor(PasswordResetToken.ANCESTOR_KEY);
+		q.setFilter(
+				new FilterPredicate(PasswordResetToken.EMAIL,Query.FilterOperator.EQUAL, email)
+		);
+		PreparedQuery pq = datastore.prepare(q);
+		return pq.asSingleEntity();
+	}
+	
 	public void updateToken(String email,String tokenStr,long beginDate,boolean valid,long id){
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();

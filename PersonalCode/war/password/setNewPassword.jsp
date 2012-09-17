@@ -1,3 +1,4 @@
+<%@page import="com.appspot.angge3.business.TokenValidator"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -104,6 +105,15 @@
 <%
 	String email = request.getParameter("email");
 	String token = request.getParameter("token");
+	if(email==null||token==null){
+		response.sendRedirect("../login.jsp");
+	}else{
+		if(!new TokenValidator().validateToken(token, email)){
+			response.sendRedirect("./errorInfo/errorInfo.jsp?errorTitle=Password reset url overdue&errorContent=Password reset url is overdue. Please get password reset url again.");
+		}
+	}
+	
+	
 %>
 <script type="text/javascript">
 	$(function(){
@@ -129,16 +139,29 @@
 				if($.trim($("#retypeNewPassword").val())!=$.trim($("#newPassword").val())){
 					$(".errorTip3").css("display","block");
 				}else{
-						//verify token
-						
-						//change password
-						$( "#dialog" ).dialog({
-							modal: true,
-							close: function() {
-								//doredirect
+						$.post(
+							"/setNewPassword",
+							{email:"<%=email%>",newPassword:$.trim($("#newPassword").val()),token:"<%=token%>"},
+							function(data){
+								if(data=="1"){
+										$.get("/logout");
+										$( "#dialog" ).dialog({
+											modal: true,
+											close: function() {
+												window.location="../login.jsp";
+											}
+										});
+										setTimeout(function () {
+											window.location = "../login.jsp";
+										}, 2000);
+								}else{
+									$( "#dialogError" ).dialog({
+										modal: true,
+									});
+								}
 							}
-						});
-						//do redirect
+						);
+						
 				}
 			}
 		});
@@ -148,8 +171,8 @@
 <title>Set New Password</title>
 </head>
 <body>
-<div id="dialog" title="Password Changed Successfully" style="display:none">
-	<p>Password changed successfully! Redirecting to homepage.</p>
+<div id="dialog" title="Password Reset Successfully" style="display:none">
+			<p>Password reset successfully! Redirecting to login page.</p>
 </div>
 <div class="content">
 	<div class="topDiv">
@@ -177,10 +200,11 @@
 		<div class="confirmButtonDiv">
 			<button class="confirmButton">Confirm</button>
 		</div>
-		<div id="dialog" title="Password Changed Successfully" style="display:none">
-			<p>Password changed successfully! Redirecting to homepage.</p>
+		<div id="dialogError" title="Password Reset Failure" style="display:none">
+			<p>Password reset failure! Please try again.</p>
 		</div>
 	</div>
 </div>
+<%@ include file="../common/footer.jsp"%>
 </body>
 </html>
