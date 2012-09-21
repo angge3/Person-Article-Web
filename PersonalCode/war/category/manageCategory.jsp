@@ -171,6 +171,9 @@
 						Entity category = itr.next();
 						ArticleFetcher fetcher = new ArticleFetcher();
 						int articleNum = fetcher.getArticlesCountByOwnerIdAndCategoryId((Long)request.getSession().getAttribute("currentUserId"), category.getKey().getId());
+						if(((String)category.getProperty(Category.NAME)).equals("Default")){
+							continue;
+						}else{
 						%>
 						<tr id="<%=category.getKey().getId()%>">
 							<td><%=category.getProperty(Category.NAME) %></td>
@@ -178,6 +181,7 @@
 							<td><a href="" class="editLink">edit</a><a href="" class="deleteLink">delete</a></td>
 						</tr>
 						<% 
+						}
 					}
 				%>
 				

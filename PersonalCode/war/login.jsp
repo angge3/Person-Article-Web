@@ -133,36 +133,11 @@ body {
 }
 </style>
 <script type="text/javascript">
+window.history.forward(1);
 	$(function() {
 		verticalMiddle();
 		$(window).resize(function() {
 			verticalMiddle();
-		});
-		$("#email").on("focus", function() {
-			$($(this).parent()).css("background-position", "-210px 0");
-			
-		});
-		$("#password").on("focus", function() {
-			$($(this).parent()).css("background-position", "-210px 0");
-			
-		});
-		$("#email").on("blur", function() {
-			$($(this).parent()).css("background-position", "-210px -52px");
-			
-
-		});
-		$("#password").on("blur", function() {
-			$($(this).parent()).css("background-position", "-210px -52px");
-			
-
-		});
-		
-		$(".inputText").on("keyup", function() {
-			if($(this).val()!=""){
-				$($($(this).parent()).find("label")).css("display","none");
-			}else{
-				$($($(this).parent()).find("label")).css("display","inline");
-			}
 		});
 		
 		$(".loginButton").on("mouseover", function() {
@@ -200,7 +175,7 @@ body {
 	<div class="content">
 		<div class="logo"></div>
 		<div class="loginFormDiv">
-			<form action="login.jsp" method="post" autocomplete="off">
+			<form action="login.jsp" method="post" >
 				<div class="emailInput ">
 					<label for="email">Email</label>
 					<input type="text"  name="email" class="inputText"
@@ -225,22 +200,78 @@ body {
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		$(function(){
+			setTimeout(
+					function(){
+						if($.trim($("#email").val())!=""){
+							$(".emailInput label").css("display","none");
+						}
+						if($.trim($("#password").val())!=""){
+							$(".passwordInput label").css("display","none");
+						}
+					},
+					100)
+		});
+		$(window).load(function(){
+			setTimeout(function(){
+		    $('input:-webkit-autofill').each(function(){
+		        var text = $(this).val();
+		        var name = $(this).attr('name');
+		        $(this).after(this.outerHTML).remove();
+		        $('input[name=' + name + ']').val(text);
+		    });
+		    $("#email").on("focus", function() {
+				$($(this).parent()).css("background-position", "-210px 0");
+				
+			});
+			$("#password").on("focus", function() {
+				$($(this).parent()).css("background-position", "-210px 0");
+				
+			});
+			$("#email").on("blur", function() {
+				$($(this).parent()).css("background-position", "-210px -52px");
+				
+
+			});
+			$("#password").on("blur", function() {
+				$($(this).parent()).css("background-position", "-210px -52px");
+				
+
+			});
+			
+			$(".inputText").on("keyup", function() {
+				if($(this).val()!=""){
+					$($($(this).parent()).find("label")).css("display","none");
+				}else{
+					$($($(this).parent()).find("label")).css("display","inline");
+				}
+			});
+			},50)
+		    setInterval(function(){
+		    	if($("#email").val()!=""){
+		    		$(".emailInput label").css("display","none");
+		    	}
+		    },200);
+		});
+	</script>
 	<%
 		Cookie[] cookies = request.getCookies();
-		String email = "";
-		String password = "";
+		String email = null;
+		String password = null;
 		boolean remembered = false;
-		for(Cookie cookie : cookies){
-		    if(cookie.getName().equals("email")){
-		    	email = cookie.getValue(); 
-		    	remembered = true;
-		    }
-		    if(cookie.getName().equals("password")){
-		    	password = cookie.getValue(); 
-		    }
-		   	
+		if(cookies!=null){
+			for(Cookie cookie : cookies){
+			    if(cookie.getName().equals("email")){
+			    	email = cookie.getValue(); 
+			    	remembered = true;
+			    }
+			    if(cookie.getName().equals("password")){
+			    	password = cookie.getValue(); 
+			    }
+			   	
+			}
 		}
-		
 		if(!remembered){
 			email = request.getParameter("email");
 			password = request.getParameter("password");

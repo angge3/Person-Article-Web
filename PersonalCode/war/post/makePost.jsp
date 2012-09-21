@@ -156,6 +156,12 @@
 				}else{
 					List<Entity> categoryList = new CategoryFetcher().getAllCategoryByOwnerId((Long)session.getAttribute("currentUserId"));
 					session.setAttribute("allCategoryList", categoryList);
+					if(categoryList.size()==0){
+						Entity category = new CategoryPoster().insertCategory("Default", (Long)session.getAttribute("currentUserId"));
+						%>
+						<option value="<%=category.getKey().getId()%>"><%=category.getProperty(Category.NAME) %></option>
+						<% 
+					}
 					Iterator<Entity> itr = categoryList.iterator();
 					while(itr.hasNext()){
 						Entity category = itr.next();
